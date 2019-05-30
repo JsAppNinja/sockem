@@ -21,11 +21,13 @@ https://hub.docker.com/editions/community/docker-ce-desktop-mac
 ### Good tools
 * Sometimes you might want to nuke all your docker images and containers. Copy the following script and save it as a .bat file and run it to do so
 
-```@echo off
+```
+@echo off
 FOR /f "tokens=*" %%i IN ('docker ps -aq') DO docker rm %%i
-FOR /f "tokens=*" %%i IN ('docker images --format "{{.ID}}"') DO docker rmi %%i```
+FOR /f "tokens=*" %%i IN ('docker images --format "{{.ID}}"') DO docker rmi %%i
+```
 
-## Jenkins configuration (Not in use yet. Refer to Heroku instructions below)
+## Jenkins configuration (Not in use yet)
 * Once docker-compose up has finished and Jenkins is up and running, go to `localhost:8080` and you'll be asked for a password
 * The password was output into the terminal where you ran `docker-compose up`
 * When you're in `install suggested plugins` and when it's finished, create a login and you're done!
