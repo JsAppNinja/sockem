@@ -6,5 +6,7 @@ Check the ```docs``` folder for instructions on getting started
 
 ## About
 Jun Cheong
+
 Turcan Cicek
+
 Mike Magoulis

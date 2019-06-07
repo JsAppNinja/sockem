@@ -4,10 +4,6 @@
 https://hub.docker.com/editions/community/docker-ce-desktop-windows
 https://hub.docker.com/editions/community/docker-ce-desktop-mac
 
-### When running for the first time (or if you deleted all your images & containers)
-* First run the command below
-```docker-compose run web django-admin startproject sockemboppem .```
-
 ### Running the app
 * Now, the app and everything else you might need for development can be started with one simple command line code in the project directory!
 
@@ -18,7 +14,7 @@ https://hub.docker.com/editions/community/docker-ce-desktop-mac
 
 ```docker-compose down```
 
-### Good tools
+### Tools
 * Sometimes you might want to nuke all your docker images and containers. Copy the following script and save it as a .bat file and run it to do so
 
 ```
