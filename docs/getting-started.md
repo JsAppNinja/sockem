@@ -1,4 +1,10 @@
 # Getting started
+
+## .gitignore
+* Create a file called ```.gitignore``` in the project directory and past everything from this link
+
+```https://github.com/github/gitignore/blob/master/Python.gitignore```
+
 ## Using Docker
 ### Installation
 https://hub.docker.com/editions/community/docker-ce-desktop-windows
