@@ -3,6 +3,11 @@ version: '3.3'
 services:
   db:
     image: postgres
+    restart: always
+    env_file:
+      - ./db/db-dev.env
+    container_name: sockem-boppem_db
+
   web:
     build: .
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
@@ -10,8 +15,11 @@ services:
       - .:/code
     ports:
       - "8000:8000"
+    env_file:
+      - ./db/db-dev.env
     depends_on:
       - db
+
   jenkins:
     image: jenkins/jenkins:lts
     ports:
@@ -20,6 +28,16 @@ services:
     volumes:
       - 'jenkins_data:/var/jenkins_home'
 
+  pgadmin:
+    image: dpage/pgadmin4
+    env_file:
+      - ./pgadmin4/pgadmin-dev.env
+    depends_on:
+      - db
+    ports:
+      - "5555:5555"
+
 volumes:
   jenkins_data:
     driver: local
+  
