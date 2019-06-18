@@ -15,6 +15,12 @@ https://hub.docker.com/editions/community/docker-ce-desktop-mac
 
 ```docker-compose up```
 
+* The frontend React app will be live on ```localhost:3000```
+
+* The backend Django app will be live on ```localhost:8000```
+
+* The Jenkins server will be live on ```localhost:8081```
+
 ### Closing the app 
 * The app can be stopped with CTRL + C (Or whatever appropriate command on your OS) then just run the code below to stop and remove the other containers if desired
 

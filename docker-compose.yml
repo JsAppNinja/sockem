@@ -8,8 +8,8 @@ services:
       - ./db/db-dev.env
     container_name: sockem-boppem_db
 
-  web:
-    build: .
+  backend:
+    build: ./backend
     command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python manage.py runserver 0.0.0.0:8000'
     volumes:
       - .:/code
@@ -19,6 +19,15 @@ services:
       - ./db/db-dev.env
     depends_on:
       - db
+
+  frontend:
+    build: ./frontend
+    command: ["npm", "start"]
+    volumes:
+      - ./frontend:/app/frontend
+      - node-modules:/app/frontend/node_modules
+    ports:
+      - "3000:3000"
 
   jenkins:
     image: jenkins/jenkins:lts
@@ -40,4 +49,4 @@ services:
 volumes:
   jenkins_data:
     driver: local
-  
+  node-modules:
