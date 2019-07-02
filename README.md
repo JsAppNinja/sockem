@@ -8,5 +8,3 @@ Check the ```docs``` folder for instructions on getting started
 Jun Cheong
 
 Turcan Cicek
-
-Mike Magoulis

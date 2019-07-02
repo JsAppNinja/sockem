@@ -3,7 +3,7 @@
 * Once the container is up using `docker-compose`, pgAdmin4 should be up on localhost:5555
 
 ## Logging in
-* Login information can be found in `/pgadmin4/pgadmin-dev.env
+* Login information can be found in `/pgadmin4/pgadmin-dev.env`
 
 ## Adding server / connecting to db
 * Click `add new server`
