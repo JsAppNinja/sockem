@@ -18,13 +18,13 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP DATABASE "dev_db";
+-- DROP DATABASE "dev_db";
+-- --
+-- -- TOC entry 2950 (class 1262 OID 16385)
+-- -- Name: dev_db; Type: DATABASE; Schema: -; Owner: dev
+-- --
 --
--- TOC entry 2950 (class 1262 OID 16385)
--- Name: dev_db; Type: DATABASE; Schema: -; Owner: dev
---
-
-CREATE DATABASE "dev_db" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+-- CREATE DATABASE "dev_db" WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
 
 
 ALTER DATABASE "dev_db" OWNER TO "dev";
