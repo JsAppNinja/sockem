@@ -185,7 +185,7 @@ ALTER SEQUENCE "sockem_boppem"."match_user_match_user_id_seq" OWNED BY "sockem_b
 CREATE TABLE "sockem_boppem"."tournament" (
     "tournament_id" integer NOT NULL,
     "name" character varying(16),
-    "start_date" timestamp with time zone NOT NULL,
+    "start_date" timestamp with time zone,
     "creator_id" integer NOT NULL
 );
 

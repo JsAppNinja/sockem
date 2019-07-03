@@ -15,6 +15,12 @@ class Match(models.Model):
     round = models.SmallIntegerField()
     num_games = models.SmallIntegerField()
 
+class Tournament(models.Model):
+    tournament_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=16, null=True)
+    start_date = models.DateTimeField(null=True)
+    creator_id = models.ForeignKey('User', models.PROTECT)
+
 class User(models.Model):
     user_id = models.AutoField(primary_key=True)
     email = models.CharField(max_length=None)
