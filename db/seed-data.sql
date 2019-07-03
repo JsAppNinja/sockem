@@ -64,7 +64,7 @@ SET default_with_oids = false;
 CREATE TABLE "sockem_boppem"."game" (
     "game_id" integer NOT NULL,
     "match_id" integer NOT NULL,
-    "winner_id" integer NOT NULL,
+    "winner_id" integer,
     "start_time" timestamp with time zone,
     "end_time" timestamp with time zone
 );
