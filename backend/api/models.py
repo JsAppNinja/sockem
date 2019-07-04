@@ -5,10 +5,10 @@ from django.db import models
 class User(models.Model):
     """User model. Users can also be judges"""
     user_id = models.AutoField(primary_key=True)
-    email = models.CharField(max_length=None)
+    email = models.TextField()
     username = models.CharField(max_length=16)
     password = models.CharField(max_length=16)
-    avatar = models.CharField(max_length=None, null=True)
+    avatar = models.TextField(null=True)
 
 
 class Tournament(models.Model):
@@ -16,9 +16,9 @@ class Tournament(models.Model):
     tournament_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=16, null=True)
     start_date = models.DateTimeField(null=True)
-    creator_id = models.ForeignKey(User, models.PROTECT)
-    users = models.ManyToManyField(User, through='TournamentUser')
-    judges = models.ManyToManyField(User, through='TournamentJudge')
+    creator_id = models.ForeignKey(User, models.PROTECT, related_name='tournament_creator_id')
+    users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
+    judges = models.ManyToManyField(User, through='TournamentJudge', related_name='tournament_judges')
 
 
 class TournamentUser(models.Model):
@@ -39,7 +39,7 @@ class Match(models.Model):
     """Match model. Round == the round in the tournament. Num_games == # games per match"""
     match_id = models.AutoField(primary_key=True)
     tournament_id = models.ForeignKey(Tournament, models.PROTECT)
-    judge_id = models.ForeignKey(User, models.PROTECT)
+    judge_id = models.ForeignKey(User, models.PROTECT, related_name='match_judge_id')
     round = models.SmallIntegerField()
     num_games = models.SmallIntegerField()
     users = models.ManyToManyField(User, through='MatchUser')

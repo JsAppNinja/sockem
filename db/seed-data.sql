@@ -302,10 +302,10 @@ ALTER SEQUENCE "sockem_boppem"."tournament_user_tournament_user_id_seq" OWNED BY
 
 CREATE TABLE "sockem_boppem"."user" (
     "user_id" integer NOT NULL,
-    "email" character varying NOT NULL,
+    "email" text NOT NULL,
     "username" character varying(16) NOT NULL,
     "password" character(16) NOT NULL,
-    "avatar" character varying
+    "avatar" text varying
 );
 
 
