@@ -5,7 +5,7 @@ from django.db import models
 class User(models.Model):
     """User model. Users can also be judges"""
     user_id = models.AutoField(primary_key=True)
-    email = models.TextField()
+    email = models.EmailField()
     username = models.CharField(max_length=16)
     password = models.CharField(max_length=16)
     avatar = models.TextField(blank=True, null=True)
