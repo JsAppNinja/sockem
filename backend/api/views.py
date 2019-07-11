@@ -1,17 +1,17 @@
+"""
+Class-based API views using the Django REST Framework
+"""
+from rest_framework import generics
+from rest_framework import permissions
 from .models import User
 from .serializers import UserSerializer
-from django.http import Http404
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import generics
 
 
 class UserList(generics.ListCreateAPIView):
     """
     List all users, or create a new user.
     """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -20,5 +20,6 @@ class UserDetail(generics.RetrieveUpdateAPIView):
     """
     Retrieve, update or delete a user.
     """
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = User.objects.all()
     serializer_class = UserSerializer

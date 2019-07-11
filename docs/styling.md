@@ -20,3 +20,5 @@
 * Run [Prettier](https://prettier.io/) on all .js files that have been edited
 ### Python
 * Run [Pylint](https://www.pylint.org/) on all .py files that have been edited
+* Should also install pylint-django using `pip install pylint-django` and 
+  run it by using `pylint yourfilehere.py --load-plugins pylint_django`
