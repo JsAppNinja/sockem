@@ -1,3 +1,15 @@
+"""
+Django REST Framework serializers
+
+From the DRF docs:
+
+Allows complex data to be converted to native Python datatypes that can then be easily rendered into
+JSON, XML or other content types.
+
+Also provide deserialization, allowing parsed data to be converted back into complex types,
+after first validating the incoming data.
+"""
+
 from rest_framework import serializers
 from api.models import User, Tournament, TournamentUser, TournamentJudge, Match, MatchUser, Game
 
