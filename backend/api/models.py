@@ -2,23 +2,20 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.contrib.auth.models import AbstractUser
 from rest_framework.authtoken.models import Token
-from django.conf import settings
 
 
-# This code is triggered whenever a new user has been created and saved to the database
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+class User(AbstractUser):
+    """
+    User model. Users can also be judges.
 
-
-class User(models.Model):
-    """User model. Users can also be judges"""
+    Note that this class extends
+    django.contrib.auth.models.AbstractUser
+    and therefore inherits its fields, which
+    can be further explored in the Django docs
+    """
     user_id = models.AutoField(primary_key=True)
-    email = models.EmailField()
-    username = models.CharField(max_length=16)
-    password = models.CharField(max_length=16)
     avatar = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -91,3 +88,13 @@ class Game(models.Model):
 
     class Meta:
         db_table = 'game'
+
+
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    """
+    This automatically creates an authentication token whenever
+    a new User is created.
+    """
+    if created:
+        Token.objects.create(user=instance)
