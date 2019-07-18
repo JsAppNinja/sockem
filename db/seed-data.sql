@@ -64,7 +64,7 @@ SET default_with_oids = false;
 CREATE TABLE "sockem_boppem"."game" (
     "game_id" integer NOT NULL,
     "match_id" integer NOT NULL,
-    "winner_id" integer NOT NULL,
+    "winner_id" integer,
     "start_time" timestamp with time zone,
     "end_time" timestamp with time zone
 );
@@ -185,7 +185,7 @@ ALTER SEQUENCE "sockem_boppem"."match_user_match_user_id_seq" OWNED BY "sockem_b
 CREATE TABLE "sockem_boppem"."tournament" (
     "tournament_id" integer NOT NULL,
     "name" character varying(16),
-    "start_date" timestamp with time zone NOT NULL,
+    "start_date" timestamp with time zone,
     "creator_id" integer NOT NULL
 );
 
@@ -302,10 +302,10 @@ ALTER SEQUENCE "sockem_boppem"."tournament_user_tournament_user_id_seq" OWNED BY
 
 CREATE TABLE "sockem_boppem"."user" (
     "user_id" integer NOT NULL,
-    "email" character varying NOT NULL,
+    "email" text NOT NULL,
     "username" character varying(16) NOT NULL,
     "password" character(16) NOT NULL,
-    "avatar" character varying
+    "avatar" text varying
 );
 
 
