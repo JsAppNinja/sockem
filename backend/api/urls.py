@@ -12,6 +12,8 @@ from . import views
 urlpatterns = [
     path('users/', views.UserList.as_view()),
     path('users/<int:pk>', views.UserDetail.as_view()),
+    path('tournaments/', views.TournamentList.as_view()),
+    path('tournaments/<int:pk>', views.TournamentDetail.as_view()),
     path('api-token-auth/', auth_views.obtain_auth_token),
 ]
 

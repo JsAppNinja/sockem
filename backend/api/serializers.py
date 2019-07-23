@@ -45,3 +45,58 @@ class UserSerializer(serializers.ModelSerializer):
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.save()
         return instance
+
+
+class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
+    """
+
+    tournament_user_id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
+
+    """
+
+    user_id = serializers.ReadOnlyField(source='user.user_id')
+    tournament_id = serializers.ReadOnlyField(source='tournament.tournament_id')
+
+    class Meta:
+        model = TournamentUser
+        fields = ('tournament_user_id', 'user_id', 'tournament_id')
+
+
+class TournamentJudgeSerializer(serializers.HyperlinkedModelSerializer):
+    """
+
+    tournament_judge_id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+    tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
+
+    """
+
+    user_id = serializers.ReadOnlyField(source='user.user_id')
+    tournament_id = serializers.ReadOnlyField(source='tournament.tournament_id')
+
+    class Meta:
+        model = TournamentJudge
+        fields = ('tournament_judge_id', 'user_id', 'tournament_id')
+
+
+class TournamentSerializer(serializers.ModelSerializer):
+    """
+
+    tournament_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=16, blank=True, null=True)
+    start_date = models.DateTimeField(blank=True, null=True)
+    creator_id = models.ForeignKey(User, models.PROTECT, related_name='tournament_creator_id')
+    users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
+    judges = models.ManyToManyField(User, through='TournamentJudge', related_name='tournament_judges')
+
+    """
+
+    users = TournamentUserSerializer(source='tournament_users', read_only=True, many=True)
+    judges = TournamentJudgeSerializer(source='tournament_judges', read_only=True, many=True)
+
+    class Meta:
+        model = Tournament
+        fields = ('tournament_id', 'name', 'start_date', 'creator_id', 'users', 'judges')
+
