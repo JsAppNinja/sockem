@@ -5,7 +5,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
 from .models import User, Tournament
-from .serializers import UserSerializer, TournamentUserSerializer, TournamentJudgeSerializer, TournamentSerializer
+from .serializers import UserSerializer, TournamentUserSerializer, TournamentSerializer
 
 
 class UserList(generics.ListCreateAPIView):

@@ -11,20 +11,10 @@ after first validating the incoming data.
 """
 
 from rest_framework import serializers
-from api.models import User, Tournament, TournamentUser, TournamentJudge, Match, MatchUser, Game
+from api.models import User, Tournament, TournamentUser, Match, MatchUser, Game
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """
-
-    user_id = serializers.IntegerField(read_only=True)
-    email = serializers.EmailField(max_length=None)
-    username = serializers.CharField(max_length=16)
-    password = serializers.CharField(max_length=16)
-    avatar = serializers.CharField(allow_blank=True)
-
-    """
-
     class Meta:
         model = User
         fields = ('user_id', 'email', 'username', 'password', 'avatar')
@@ -53,6 +43,7 @@ class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
     tournament_user_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
+    is_judge = models.BooleanField(default=False)
 
     """
 
@@ -61,42 +52,57 @@ class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = TournamentUser
-        fields = ('tournament_user_id', 'user_id', 'tournament_id')
+        fields = ('tournament_user_id', 'user_id', 'tournament_id', 'is_judge')
 
 
-class TournamentJudgeSerializer(serializers.HyperlinkedModelSerializer):
-    """
-
-    tournament_judge_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-    tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
-
-    """
-
-    user_id = serializers.ReadOnlyField(source='user.user_id')
-    tournament_id = serializers.ReadOnlyField(source='tournament.tournament_id')
-
-    class Meta:
-        model = TournamentJudge
-        fields = ('tournament_judge_id', 'user_id', 'tournament_id')
+# class TournamentJudgeSerializer(serializers.HyperlinkedModelSerializer):
+#     """
+#
+#     tournament_judge_id = models.AutoField(primary_key=True)
+#     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
+#     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
+#
+#     """
+#
+#     user_id = serializers.ReadOnlyField(source='user.user_id')
+#     tournament_id = serializers.ReadOnlyField(source='tournament.tournament_id')
+#
+#     class Meta:
+#         model = TournamentJudge
+#         fields = ('tournament_judge_id', 'user_id', 'tournament_id')
 
 
 class TournamentSerializer(serializers.ModelSerializer):
     """
-
     tournament_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=16, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
     creator_id = models.ForeignKey(User, models.PROTECT, related_name='tournament_creator_id')
     users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
-    judges = models.ManyToManyField(User, through='TournamentJudge', related_name='tournament_judges')
-
     """
 
-    users = TournamentUserSerializer(source='tournament_users', read_only=True, many=True)
-    judges = TournamentJudgeSerializer(source='tournament_judges', read_only=True, many=True)
+    # users = TournamentUserSerializer(source='tournament_users', read_only=True, many=True)
+    users = TournamentUserSerializer(source='tournamentuser_set', read_only=True, many=True)
+    # judges = TournamentJudgeSerializer(source='tournament_judges', read_only=True, many=True)
 
     class Meta:
         model = Tournament
-        fields = ('tournament_id', 'name', 'start_date', 'creator_id', 'users', 'judges')
+        fields = ('tournament_id', 'name', 'start_date', 'creator_id', 'users')
+        depth = 1
 
+    # def create(self, validated_data):
+    #     """
+    #     Create and return a new `Tournament` instance, given the validated data.
+    #     """
+    #     return Tournament.objects.create(**validated_data)
+    #
+    # def update(self, instance, validated_data):
+    #     """
+    #     Update and return an existing `Tournament` instance, given the validated data.
+    #     """
+    #     instance.email = validated_data.get('email', instance.email)
+    #     instance.username = validated_data.get('username', instance.username)
+    #     instance.password = validated_data.get('password', instance.password)
+    #     instance.avatar = validated_data.get('avatar', instance.avatar)
+    #     instance.save()
+    #     return instance
