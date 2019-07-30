@@ -40,31 +40,28 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
+class TournamentUserSerializer(serializers.ModelSerializer):
     """
-
-    tournament_user_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-    tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
-    is_judge = models.BooleanField(default=False)
-
+    Serializer for TournamentUser model
     """
-
-    user = serializers.ReadOnlyField(source='user.user_id')
-    tournament = serializers.ReadOnlyField(source='tournament.tournament_id')
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    tournament = serializers.PrimaryKeyRelatedField(queryset=Tournament.objects.all())
 
     class Meta:
         model = TournamentUser
         fields = ('tournament_user_id', 'user', 'tournament', 'is_judge',)
 
+    def create(self, validated_data):
+        """
+        Create and return a new `TournamentUser` instance, given the validated data.
+        """
+        tournament_user = TournamentUser.objects.create(**validated_data)
+        return tournament_user
+
 
 class TournamentSerializer(serializers.ModelSerializer):
     """
-    tournament_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=32, blank=True, null=True)
-    start_date = models.DateTimeField(blank=True, null=True)
-    creator_id = models.ForeignKey(User, models.PROTECT, related_name='tournament_creator_id')
-    users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
+    Serializer for Tournament model
     """
 
     users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True,)
@@ -88,5 +85,4 @@ class TournamentSerializer(serializers.ModelSerializer):
                 is_judge=user_data[0]['is_judge']
             )
         tournament_user.save()
-
         return tournament

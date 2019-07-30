@@ -1,4 +1,16 @@
 # Authorization 
+## Obtaining tokens
+* Make a POST request to `api/api-token-auth/` with valid `username` and `password` fields to receive a users token key
+* Example:
+
+```
+{
+    "username": "admin",
+    "password": "password"
+}
+```
+
+## Making requests with tokens
 * In the HTTP request header, include the token key in this form (note the whitespace after 'Token')
 
 `Authorization: Token be1314c3be8264b2f3b1a46de5fb9e05ef4e9808`

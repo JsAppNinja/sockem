@@ -1,11 +1,12 @@
 """
 Class-based API views using the Django REST Framework
 """
+from django import http
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
-from .models import User, Tournament
-from .serializers import UserSerializer, TournamentUserSerializer, TournamentSerializer
+from .models import User, Tournament, TournamentUser
+from . import serializers
 
 
 class UserList(generics.ListCreateAPIView):
@@ -15,7 +16,7 @@ class UserList(generics.ListCreateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = serializers.UserSerializer
 
 
 class UserDetail(generics.RetrieveUpdateAPIView):
@@ -25,7 +26,7 @@ class UserDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = serializers.UserSerializer
 
 
 class TournamentList(generics.ListCreateAPIView):
@@ -35,7 +36,7 @@ class TournamentList(generics.ListCreateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Tournament.objects.all()
-    serializer_class = TournamentSerializer
+    serializer_class = serializers.TournamentSerializer
 
 
 class TournamentDetail(generics.RetrieveUpdateAPIView):
@@ -45,4 +46,24 @@ class TournamentDetail(generics.RetrieveUpdateAPIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Tournament.objects.all()
-    serializer_class = TournamentSerializer
+    serializer_class = serializers.TournamentSerializer
+
+
+class TournamentUserList(generics.ListCreateAPIView):
+    """
+    List all tournament users, or create a new tournament user
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = TournamentUser.objects.all()
+    serializer_class = serializers.TournamentUserSerializer
+
+
+class TournamentUserDetail(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve, update or delete a tournament user.
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = TournamentUser.objects.all()
+    serializer_class = serializers.TournamentUserSerializer
