@@ -44,6 +44,9 @@ class TournamentUser(models.Model):
     class Meta:
         db_table = 'tournament_user'
 
+    def __str__(self):
+        return 'tournament_user_id: %s, user: %s, tournament: %s, is_judge: %s' % (self.tournament_user_id, self.user, self.tournament, self.is_judge)
+
 
 class Match(models.Model):
     """Match model. Round == the round in the tournament. Num_games == # games per match"""
