@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.authtoken.models import Token
 
 
@@ -27,7 +28,8 @@ class Tournament(models.Model):
     tournament_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
-    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='tournament_creator_id')
+    creator = \
+        models.ForeignKey(User, on_delete=models.PROTECT, related_name='tournament_creator_id')
     users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
 
     class Meta:
@@ -45,15 +47,18 @@ class TournamentUser(models.Model):
         db_table = 'tournament_user'
 
     def __str__(self):
-        return 'tournament_user_id: %s, user: %s, tournament: %s, is_judge: %s' % (self.tournament_user_id, self.user, self.tournament, self.is_judge)
+        return 'tournament_user_id: %s, user: %s, tournament: %s, is_judge: %s' % \
+               (self.tournament_user_id, self.user, self.tournament, self.is_judge)
 
 
 class Match(models.Model):
     """Match model. Round == the round in the tournament. Num_games == # games per match"""
     match_id = models.AutoField(primary_key=True)
     tournament = models.ForeignKey(Tournament, models.PROTECT)
-    round = models.SmallIntegerField()
-    num_games = models.SmallIntegerField()
+    round = models.SmallIntegerField(
+        default=1,
+        validators=[MaxValueValidator(100), MinValueValidator(1)]
+    )
     users = models.ManyToManyField(User, through='MatchUser')
 
     class Meta:
@@ -65,7 +70,6 @@ class MatchUser(models.Model):
     match_user_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     match = models.ForeignKey(Match, on_delete=models.PROTECT)
-    is_judge = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'match_user'

@@ -15,6 +15,9 @@ from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for User model
+    """
     class Meta:
         model = User
         fields = ('user_id', 'email', 'username', 'password', 'avatar',)
@@ -37,33 +40,29 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
+class TournamentUserSerializer(serializers.ModelSerializer):
     """
-
-    tournament_user_id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-    tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
-    is_judge = models.BooleanField(default=False)
-
+    Serializer for TournamentUser model
     """
-
-    user = serializers.ReadOnlyField(source='user.user_id')
-    tournament = serializers.ReadOnlyField(source='tournament.tournament_id')
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    tournament = serializers.PrimaryKeyRelatedField(queryset=Tournament.objects.all())
 
     class Meta:
         model = TournamentUser
         fields = ('tournament_user_id', 'user', 'tournament', 'is_judge',)
 
+    def create(self, validated_data):
+        """
+        Create and return a new `TournamentUser` instance, given the validated data.
+        """
+        tournament_user = TournamentUser.objects.create(**validated_data)
+        return tournament_user
+
 
 class TournamentSerializer(serializers.ModelSerializer):
     """
-    tournament_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=32, blank=True, null=True)
-    start_date = models.DateTimeField(blank=True, null=True)
-    creator_id = models.ForeignKey(User, models.PROTECT, related_name='tournament_creator_id')
-    users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
+    Serializer for Tournament model
     """
-
     users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True,)
     creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -78,7 +77,68 @@ class TournamentSerializer(serializers.ModelSerializer):
         """
         user_data = validated_data.pop('tournamentuser_set')
         tournament = Tournament.objects.create(**validated_data)
-        tournament_user = TournamentUser.objects.create(user=validated_data['creator'], tournament=tournament, is_judge=user_data[0]['is_judge'])
+        tournament_user = \
+            TournamentUser.objects.create(
+                user=validated_data['creator'],
+                tournament=tournament,
+                is_judge=user_data[0]['is_judge']
+            )
         tournament_user.save()
-
         return tournament
+
+
+class MatchUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for MatchUser model
+    """
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())
+
+    class Meta:
+        model = MatchUser
+        fields = ('match_user_id', 'user', 'match',)
+
+    def create(self, validated_data):
+        """
+        Create and return a new `MatchUser` instance, given the validated data.
+        """
+        match_user = MatchUser.objects.create(**validated_data)
+        return match_user
+
+
+class MatchSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Match model
+    """
+    tournament = serializers.PrimaryKeyRelatedField(queryset=Tournament.objects.all())
+    users = MatchUserSerializer(source='matchuser_set', read_only=True, many=True,)
+
+    class Meta:
+        model = Match
+        fields = ('match_id', 'tournament', 'round', 'users',)
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Match` instance, given the validated data.
+        """
+        match = Match.objects.create(**validated_data)
+        return match
+
+
+class GameSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Game model
+    """
+    match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())
+    winner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Game
+        fields = ('game_id', 'match', 'winner', 'start_time', 'end_time')
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Game` instance, given the validated data.
+        """
+        game = Game.objects.create(**validated_data)
+        return game
