@@ -59,10 +59,6 @@ class Match(models.Model):
         default=1,
         validators=[MaxValueValidator(100), MinValueValidator(1)]
     )
-    num_games = models.SmallIntegerField(
-        default=1,
-        validators=[MaxValueValidator(100), MinValueValidator(1)]
-    )
     users = models.ManyToManyField(User, through='MatchUser')
 
     class Meta:

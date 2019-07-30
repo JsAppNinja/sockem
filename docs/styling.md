@@ -23,4 +23,4 @@
 * Should also install pylint-django using `pip install pylint-django` and 
   run it by using `pylint --load-plugins pylint_django yourfilehere.py`
 * Pylint can also be run on all files in a directory using the form 
-` pylint --load-plugins pylint_django backend/api/*.py`
+`pylint --load-plugins pylint_django backend/api/*.py`

@@ -4,7 +4,7 @@ Class-based API views using the Django REST Framework
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
-from .models import User, Tournament, TournamentUser, Match, MatchUser
+from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
 from . import serializers
 
 
@@ -70,7 +70,7 @@ class TournamentUserDetail(generics.RetrieveUpdateAPIView):
 
 class MatchList(generics.ListCreateAPIView):
     """
-    List all matches, or create a new Match
+    List all matches, or create a new Match.
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -90,7 +90,7 @@ class MatchDetail(generics.RetrieveUpdateAPIView):
 
 class MatchUserList(generics.ListCreateAPIView):
     """
-    List all match users, or create a new match user
+    List all match users, or create a new match user.
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -106,3 +106,23 @@ class MatchUserDetail(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = MatchUser.objects.all()
     serializer_class = serializers.MatchUserSerializer
+
+
+class GameList(generics.ListCreateAPIView):
+    """
+    List all games, or create a new game.
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Game.objects.all()
+    serializer_class = serializers.GameSerializer
+
+
+class GameDetail(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve, update or delete a game.
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Game.objects.all()
+    serializer_class = serializers.GameSerializer

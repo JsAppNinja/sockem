@@ -63,7 +63,6 @@ class TournamentSerializer(serializers.ModelSerializer):
     """
     Serializer for Tournament model
     """
-
     users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True,)
     creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
@@ -92,12 +91,6 @@ class MatchUserSerializer(serializers.ModelSerializer):
     """
     Serializer for MatchUser model
     """
-    """
-    match_user_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    match = models.ForeignKey(Match, on_delete=models.PROTECT)
-    """
-
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())
 
@@ -117,21 +110,12 @@ class MatchSerializer(serializers.ModelSerializer):
     """
     Serializer for Match model
     """
-
-    """
-    match_id = models.AutoField(primary_key=True)
-    tournament = models.ForeignKey(Tournament, models.PROTECT)
-    round = models.SmallIntegerField()
-    num_games = models.SmallIntegerField()
-    users = models.ManyToManyField(User, through='MatchUser')
-    """
-
     tournament = serializers.PrimaryKeyRelatedField(queryset=Tournament.objects.all())
     users = MatchUserSerializer(source='matchuser_set', read_only=True, many=True,)
 
     class Meta:
         model = Match
-        fields = ('match_id', 'tournament', 'round', 'num_games', 'users',)
+        fields = ('match_id', 'tournament', 'round', 'users',)
 
     def create(self, validated_data):
         """
@@ -139,3 +123,22 @@ class MatchSerializer(serializers.ModelSerializer):
         """
         match = Match.objects.create(**validated_data)
         return match
+
+
+class GameSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Game model
+    """
+    match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())
+    winner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Game
+        fields = ('game_id', 'match', 'winner', 'start_time', 'end_time')
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Game` instance, given the validated data.
+        """
+        game = Game.objects.create(**validated_data)
+        return game

@@ -20,6 +20,8 @@ urlpatterns = [
     path('matches/<int:pk>', views.MatchDetail.as_view()),
     path('match_users/', views.MatchUserList.as_view()),
     path('match_users/<int:pk>', views.MatchUserDetail.as_view()),
+    path('games/', views.GameList.as_view()),
+    path('games/<int:pk>', views.GameDetail.as_view()),
     path('api-token-auth/', auth_views.obtain_auth_token),
 ]
 

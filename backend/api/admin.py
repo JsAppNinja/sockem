@@ -10,7 +10,6 @@ from .models import Match
 from .models import MatchUser
 from .models import Game
 
-# Register your models here.
 admin.site.register(User, UserAdmin)
 admin.site.register(Tournament)
 admin.site.register(TournamentUser)
