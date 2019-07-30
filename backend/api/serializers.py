@@ -86,3 +86,56 @@ class TournamentSerializer(serializers.ModelSerializer):
             )
         tournament_user.save()
         return tournament
+
+
+class MatchUserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for MatchUser model
+    """
+    """
+    match_user_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    match = models.ForeignKey(Match, on_delete=models.PROTECT)
+    """
+
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())
+
+    class Meta:
+        model = MatchUser
+        fields = ('match_user_id', 'user', 'match',)
+
+    def create(self, validated_data):
+        """
+        Create and return a new `MatchUser` instance, given the validated data.
+        """
+        match_user = MatchUser.objects.create(**validated_data)
+        return match_user
+
+
+class MatchSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Match model
+    """
+
+    """
+    match_id = models.AutoField(primary_key=True)
+    tournament = models.ForeignKey(Tournament, models.PROTECT)
+    round = models.SmallIntegerField()
+    num_games = models.SmallIntegerField()
+    users = models.ManyToManyField(User, through='MatchUser')
+    """
+
+    tournament = serializers.PrimaryKeyRelatedField(queryset=Tournament.objects.all())
+    users = MatchUserSerializer(source='matchuser_set', read_only=True, many=True,)
+
+    class Meta:
+        model = Match
+        fields = ('match_id', 'tournament', 'round', 'num_games', 'users',)
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Match` instance, given the validated data.
+        """
+        match = Match.objects.create(**validated_data)
+        return match

@@ -1,11 +1,10 @@
 """
 Class-based API views using the Django REST Framework
 """
-from django import http
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
-from .models import User, Tournament, TournamentUser
+from .models import User, Tournament, TournamentUser, Match, MatchUser
 from . import serializers
 
 
@@ -41,7 +40,7 @@ class TournamentList(generics.ListCreateAPIView):
 
 class TournamentDetail(generics.RetrieveUpdateAPIView):
     """
-    Retrieve, update or delete a user.
+    Retrieve, update or delete a tournament.
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -67,3 +66,43 @@ class TournamentUserDetail(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = TournamentUser.objects.all()
     serializer_class = serializers.TournamentUserSerializer
+
+
+class MatchList(generics.ListCreateAPIView):
+    """
+    List all matches, or create a new Match
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Match.objects.all()
+    serializer_class = serializers.MatchSerializer
+
+
+class MatchDetail(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve, update or delete a match.
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = Match.objects.all()
+    serializer_class = serializers.MatchSerializer
+
+
+class MatchUserList(generics.ListCreateAPIView):
+    """
+    List all match users, or create a new match user
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = MatchUser.objects.all()
+    serializer_class = serializers.MatchUserSerializer
+
+
+class MatchUserDetail(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve, update or delete a match user.
+    """
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    queryset = MatchUser.objects.all()
+    serializer_class = serializers.MatchUserSerializer

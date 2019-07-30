@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.authtoken.models import Token
 
 
@@ -54,8 +55,14 @@ class Match(models.Model):
     """Match model. Round == the round in the tournament. Num_games == # games per match"""
     match_id = models.AutoField(primary_key=True)
     tournament = models.ForeignKey(Tournament, models.PROTECT)
-    round = models.SmallIntegerField()
-    num_games = models.SmallIntegerField()
+    round = models.SmallIntegerField(
+        default=1,
+        validators=[MaxValueValidator(100), MinValueValidator(1)]
+    )
+    num_games = models.SmallIntegerField(
+        default=1,
+        validators=[MaxValueValidator(100), MinValueValidator(1)]
+    )
     users = models.ManyToManyField(User, through='MatchUser')
 
     class Meta:
@@ -67,7 +74,6 @@ class MatchUser(models.Model):
     match_user_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     match = models.ForeignKey(Match, on_delete=models.PROTECT)
-    is_judge = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'match_user'
