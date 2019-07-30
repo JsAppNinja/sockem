@@ -15,6 +15,9 @@ from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for User model
+    """
     class Meta:
         model = User
         fields = ('user_id', 'email', 'username', 'password', 'avatar',)
@@ -78,7 +81,12 @@ class TournamentSerializer(serializers.ModelSerializer):
         """
         user_data = validated_data.pop('tournamentuser_set')
         tournament = Tournament.objects.create(**validated_data)
-        tournament_user = TournamentUser.objects.create(user=validated_data['creator'], tournament=tournament, is_judge=user_data[0]['is_judge'])
+        tournament_user = \
+            TournamentUser.objects.create(
+                user=validated_data['creator'],
+                tournament=tournament,
+                is_judge=user_data[0]['is_judge']
+            )
         tournament_user.save()
 
         return tournament

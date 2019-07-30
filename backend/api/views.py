@@ -46,5 +46,3 @@ class TournamentDetail(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Tournament.objects.all()
     serializer_class = TournamentSerializer
-
-

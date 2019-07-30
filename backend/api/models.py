@@ -27,7 +27,8 @@ class Tournament(models.Model):
     tournament_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
-    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='tournament_creator_id')
+    creator = \
+        models.ForeignKey(User, on_delete=models.PROTECT, related_name='tournament_creator_id')
     users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
 
     class Meta:
@@ -45,7 +46,8 @@ class TournamentUser(models.Model):
         db_table = 'tournament_user'
 
     def __str__(self):
-        return 'tournament_user_id: %s, user: %s, tournament: %s, is_judge: %s' % (self.tournament_user_id, self.user, self.tournament, self.is_judge)
+        return 'tournament_user_id: %s, user: %s, tournament: %s, is_judge: %s' % \
+               (self.tournament_user_id, self.user, self.tournament, self.is_judge)
 
 
 class Match(models.Model):
