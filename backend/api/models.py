@@ -27,7 +27,7 @@ class Tournament(models.Model):
     tournament_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=32, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
-    creator = models.ForeignKey(User, models.PROTECT, related_name='tournament_creator_id')
+    creator = models.ForeignKey(User, on_delete=models.PROTECT, related_name='tournament_creator_id')
     users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
 
     class Meta:
@@ -45,21 +45,10 @@ class TournamentUser(models.Model):
         db_table = 'tournament_user'
 
 
-# class TournamentJudge(models.Model):
-#     """Intermediate table for many-to-many relationship between Tournament and User(judge)"""
-#     tournament_judge_id = models.AutoField(primary_key=True)
-#     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-#     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
-#
-#     class Meta:
-#         db_table = 'tournament_judge'
-
-
 class Match(models.Model):
     """Match model. Round == the round in the tournament. Num_games == # games per match"""
     match_id = models.AutoField(primary_key=True)
     tournament = models.ForeignKey(Tournament, models.PROTECT)
-    # judge_id = models.ForeignKey(User, models.PROTECT, related_name='match_judge_id')
     round = models.SmallIntegerField()
     num_games = models.SmallIntegerField()
     users = models.ManyToManyField(User, through='MatchUser')

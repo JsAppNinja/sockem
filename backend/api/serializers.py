@@ -11,13 +11,13 @@ after first validating the incoming data.
 """
 
 from rest_framework import serializers
-from api.models import User, Tournament, TournamentUser, Match, MatchUser, Game
+from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('user_id', 'email', 'username', 'password', 'avatar')
+        fields = ('user_id', 'email', 'username', 'password', 'avatar',)
 
     def create(self, validated_data):
         """
@@ -47,58 +47,50 @@ class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
 
     """
 
-    user_id = serializers.ReadOnlyField(source='user.user_id')
-    tournament_id = serializers.ReadOnlyField(source='tournament.tournament_id')
+    user = serializers.ReadOnlyField(source='user.user_id')
+    tournament = serializers.ReadOnlyField(source='tournament.tournament_id')
 
     class Meta:
         model = TournamentUser
-        fields = ('tournament_user_id', 'user_id', 'tournament_id', 'is_judge')
-
-
-# class TournamentJudgeSerializer(serializers.HyperlinkedModelSerializer):
-#     """
-#
-#     tournament_judge_id = models.AutoField(primary_key=True)
-#     user_id = models.ForeignKey(User, on_delete=models.PROTECT)
-#     tournament_id = models.ForeignKey(Tournament, on_delete=models.PROTECT)
-#
-#     """
-#
-#     user_id = serializers.ReadOnlyField(source='user.user_id')
-#     tournament_id = serializers.ReadOnlyField(source='tournament.tournament_id')
-#
-#     class Meta:
-#         model = TournamentJudge
-#         fields = ('tournament_judge_id', 'user_id', 'tournament_id')
+        fields = ('tournament_user_id', 'user', 'tournament', 'is_judge',)
 
 
 class TournamentSerializer(serializers.ModelSerializer):
     """
     tournament_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=16, blank=True, null=True)
+    name = models.CharField(max_length=32, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
     creator_id = models.ForeignKey(User, models.PROTECT, related_name='tournament_creator_id')
     users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
     """
 
-    # users = TournamentUserSerializer(source='tournament_users', read_only=True, many=True)
-    users = TournamentUserSerializer(source='tournamentuser_set', read_only=True, many=True)
-    # judges = TournamentJudgeSerializer(source='tournament_judges', read_only=True, many=True)
+    users = TournamentUserSerializer(source='tournamentuser_set', read_only=False,)
+    creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = Tournament
-        fields = ('tournament_id', 'name', 'start_date', 'creator_id', 'users')
+        fields = ('tournament_id', 'name', 'start_date', 'creator', 'users',)
         depth = 1
 
-    # def create(self, validated_data):
-    #     """
-    #     Create and return a new `Tournament` instance, given the validated data.
-    #     """
-    #     return Tournament.objects.create(**validated_data)
-    #
+    def create(self, validated_data):
+        """
+        Create and return a new `Tournament` instance, given the validated data.
+        """
+        print("PRINTING SELF")
+        print(self)
+        print(validated_data)
+        user_data = validated_data.pop('tournamentuser_set')
+        print("PRINTING USER_DATA")
+        print(user_data)
+        tournament = Tournament.objects.create(**validated_data)
+        TournamentUser.objects.create(user=validated_data['creator'], tournament=tournament, **user_data)
+        # for user_data in users_data:
+        #     user = TournamentUser.objects.create(tournament=tournament, **user_data)
+        return tournament
+
     # def update(self, instance, validated_data):
     #     """
-    #     Update and return an existing `Tournament` instance, given the validated data.
+    #     Update and return an existing `User` instance, given the validated data.
     #     """
     #     instance.email = validated_data.get('email', instance.email)
     #     instance.username = validated_data.get('username', instance.username)
