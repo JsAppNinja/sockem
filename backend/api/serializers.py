@@ -29,12 +29,6 @@ class UserSerializer(serializers.ModelSerializer):
         Create and return a new `User` instance, given the validated data.
         """
 
-        """
-            "email": "dron@sb.com",
-            "username": "dronald",
-            "password": "dronaldio",
-            "avatar": "someurlhere"
-        """
         return User.objects.create(
             email=validated_data['email'],
             username=validated_data['username'],

@@ -23,6 +23,13 @@ class User(AbstractUser):
     class Meta:
         db_table = 'user'
 
+    def __str__(self):
+        return '[%s] email: %s, username: %s' % \
+               (self.user_id, self.email, self.username,)
+
+    def __repr__(self):
+        return str(self.__dict__)
+
 
 class Tournament(models.Model):
     """Tournament model"""
@@ -36,6 +43,13 @@ class Tournament(models.Model):
     class Meta:
         db_table = 'tournament'
 
+    def __str__(self):
+        return '[%s] name: %s' % \
+               (self.tournament_id, self.name)
+
+    def __repr__(self):
+        return str(self.__dict__)
+
 
 class TournamentUser(models.Model):
     """Intermediate table for many-to-many relationship between Tournament and User"""
@@ -48,8 +62,11 @@ class TournamentUser(models.Model):
         db_table = 'tournament_user'
 
     def __str__(self):
-        return 'tournament_user_id: %s, user: %s, tournament: %s, is_judge: %s' % \
-               (self.tournament_user_id, self.user, self.tournament, self.is_judge)
+        return '[%s] tournament: { %s }, user: { %s }, is_judge: %s' % \
+               (self.tournament_user_id, self.tournament, self.user, self.is_judge)
+
+    def __repr__(self):
+        return str(self.__dict__)
 
 
 class Match(models.Model):
@@ -65,6 +82,13 @@ class Match(models.Model):
     class Meta:
         db_table = 'match'
 
+    def __str__(self):
+        return '[%s] tournament: { %s }, round: %s' % \
+               (self.match_id, self.tournament, self.round)
+
+    def __repr__(self):
+        return str(self.__dict__)
+
 
 class MatchUser(models.Model):
     """Intermediate table for many-to-many relationship between Match and User"""
@@ -74,6 +98,13 @@ class MatchUser(models.Model):
 
     class Meta:
         db_table = 'match_user'
+
+    def __str__(self):
+        return '[%s] user: { %s }, match: { %s }' % \
+               (self.match_user_id, self.user, self.match)
+
+    def __repr__(self):
+        return str(self.__dict__)
 
 
 class Game(models.Model):
@@ -86,6 +117,13 @@ class Game(models.Model):
 
     class Meta:
         db_table = 'game'
+
+    def __str__(self):
+        return '[%s] match: { %s }, winner: { %s }' % \
+               (self.game_id, self.match, self.winner)
+
+    def __repr__(self):
+        return str(self.__dict__)
 
 
 @receiver(post_save, sender=User)
