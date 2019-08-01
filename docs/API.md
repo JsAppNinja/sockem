@@ -58,8 +58,7 @@
 ```
 {
     "tournament": 1, 
-    "round": 1,
-    "num_games": 3
+    "round": 1
 }
 ```
 
