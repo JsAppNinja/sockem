@@ -17,6 +17,7 @@ class User(AbstractUser):
     can be further explored in the Django docs
     """
     user_id = models.AutoField(primary_key=True)
+    email = models.EmailField(blank=False)
     avatar = models.TextField(blank=True, null=True)
 
     class Meta:
