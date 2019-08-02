@@ -32,13 +32,13 @@
   as a judge.
 ```
 {
-	"name": "Biggest Pasta Tournament",
+	"name": "Biggest's Pasta Tournament",
 	"start_date": "2019-07-29 21:51:23+00",
-	"creator": 2,
-	"users":
-		[{
+	"users": [
+		{
             "is_judge": false
-        }]
+        }
+    ]
 }
 ```
 

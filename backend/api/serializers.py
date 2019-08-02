@@ -52,8 +52,8 @@ class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for TournamentUser model
     """
-    user = serializers.HyperlinkedRelatedField(queryset=User.objects.all(), view_name='user-detail')
-    tournament = serializers.HyperlinkedRelatedField(queryset=Tournament.objects.all(), view_name='tournament-detail')
+    user = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
+    tournament = serializers.HyperlinkedRelatedField(read_only=True, view_name='tournament-detail')
 
     class Meta:
         model = TournamentUser
@@ -72,7 +72,8 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     Serializer for Tournament model
     """
     users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True,)
-    creator = serializers.HyperlinkedRelatedField(queryset=User.objects.all(), view_name='user-detail')
+    # creator = serializers.HyperlinkedRelatedField(queryset=User.objects.all(), view_name='user-detail')
+    creator = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
 
     class Meta:
         model = Tournament
@@ -84,6 +85,7 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
         Create and return a new `Tournament` instance, given the validated data.
         """
         user_data = validated_data.pop('tournamentuser_set')
+        validated_data['creator'] = self.context['request'].user
         tournament = Tournament.objects.create(**validated_data)
         tournament_user = \
             TournamentUser.objects.create(
