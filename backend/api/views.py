@@ -1,11 +1,25 @@
 """
 Class-based API views using the Django REST Framework
 """
-from rest_framework import generics
-from rest_framework import permissions
+from rest_framework import generics, permissions, renderers
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
 from . import serializers
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'tournaments': reverse('tournament-list', request=request, format=format),
+        'tournament_users': reverse('tournamentuser-list', request=request, format=format),
+        'matches': reverse('match-list', request=request, format=format),
+        'match_users': reverse('matchuser-list', request=request, format=format),
+        'games': reverse('game-list', request=request, format=format),
+    })
 
 
 class UserList(generics.ListCreateAPIView):
@@ -14,7 +28,7 @@ class UserList(generics.ListCreateAPIView):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = User.objects.all()
+    queryset = User.objects.get_queryset().order_by('user_id')
     serializer_class = serializers.UserSerializer
 
 
@@ -34,7 +48,7 @@ class TournamentList(generics.ListCreateAPIView):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = Tournament.objects.all()
+    queryset = Tournament.objects.get_queryset().order_by('tournament_id')
     serializer_class = serializers.TournamentSerializer
 
 
@@ -54,7 +68,7 @@ class TournamentUserList(generics.ListCreateAPIView):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = TournamentUser.objects.all()
+    queryset = TournamentUser.objects.get_queryset().order_by('tournament_user_id')
     serializer_class = serializers.TournamentUserSerializer
 
 
@@ -74,7 +88,7 @@ class MatchList(generics.ListCreateAPIView):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = Match.objects.all()
+    queryset = Match.objects.get_queryset().order_by('match_id')
     serializer_class = serializers.MatchSerializer
 
 
@@ -94,7 +108,7 @@ class MatchUserList(generics.ListCreateAPIView):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = MatchUser.objects.all()
+    queryset = MatchUser.objects.get_queryset().order_by('match_user_id')
     serializer_class = serializers.MatchUserSerializer
 
 
@@ -114,7 +128,7 @@ class GameList(generics.ListCreateAPIView):
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    queryset = Game.objects.all()
+    queryset = Game.objects.get_queryset().order_by('game_id')
     serializer_class = serializers.GameSerializer
 
 

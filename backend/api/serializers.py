@@ -15,14 +15,14 @@ from rest_framework import serializers
 from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for User model
     """
     class Meta:
         model = User
         extra_kwargs = {'password': {'write_only': True}}
-        fields = ('user_id', 'email', 'username', 'password', 'avatar',)
+        fields = ('url', 'user_id', 'email', 'username', 'password', 'avatar',)
 
     def create(self, validated_data):
         """
@@ -48,16 +48,16 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class TournamentUserSerializer(serializers.ModelSerializer):
+class TournamentUserSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for TournamentUser model
     """
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    tournament = serializers.PrimaryKeyRelatedField(queryset=Tournament.objects.all())
+    user = serializers.HyperlinkedRelatedField(queryset=User.objects.all(), view_name='user-detail')
+    tournament = serializers.HyperlinkedRelatedField(queryset=Tournament.objects.all(), view_name='tournament-detail')
 
     class Meta:
         model = TournamentUser
-        fields = ('tournament_user_id', 'user', 'tournament', 'is_judge',)
+        fields = ('url', 'tournament_user_id', 'user', 'user_id', 'tournament', 'tournament_id', 'is_judge',)
 
     def create(self, validated_data):
         """
@@ -67,16 +67,16 @@ class TournamentUserSerializer(serializers.ModelSerializer):
         return tournament_user
 
 
-class TournamentSerializer(serializers.ModelSerializer):
+class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for Tournament model
     """
     users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True,)
-    creator = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    creator = serializers.HyperlinkedRelatedField(queryset=User.objects.all(), view_name='user-detail')
 
     class Meta:
         model = Tournament
-        fields = ('tournament_id', 'name', 'start_date', 'creator', 'users',)
+        fields = ('url', 'tournament_id', 'name', 'start_date', 'creator', 'creator_id', 'users',)
         depth = 1
 
     def create(self, validated_data):
@@ -95,16 +95,16 @@ class TournamentSerializer(serializers.ModelSerializer):
         return tournament
 
 
-class MatchUserSerializer(serializers.ModelSerializer):
+class MatchUserSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for MatchUser model
     """
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())
+    user = serializers.HyperlinkedRelatedField(queryset=User.objects.all(), view_name='user-detail')
+    match = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), view_name='match-detail')
 
     class Meta:
         model = MatchUser
-        fields = ('match_user_id', 'user', 'match',)
+        fields = ('url', 'match_user_id', 'user', 'user_id', 'match', 'match_id',)
 
     def create(self, validated_data):
         """
@@ -114,16 +114,16 @@ class MatchUserSerializer(serializers.ModelSerializer):
         return match_user
 
 
-class MatchSerializer(serializers.ModelSerializer):
+class MatchSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for Match model
     """
-    tournament = serializers.PrimaryKeyRelatedField(queryset=Tournament.objects.all())
+    tournament = serializers.HyperlinkedRelatedField(queryset=Tournament.objects.all(), view_name='tournament-detail')
     users = MatchUserSerializer(source='matchuser_set', read_only=True, many=True,)
 
     class Meta:
         model = Match
-        fields = ('match_id', 'tournament', 'round', 'users',)
+        fields = ('url', 'match_id', 'tournament', 'tournament_id', 'round', 'users',)
 
     def create(self, validated_data):
         """
@@ -133,16 +133,16 @@ class MatchSerializer(serializers.ModelSerializer):
         return match
 
 
-class GameSerializer(serializers.ModelSerializer):
+class GameSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for Game model
     """
-    match = serializers.PrimaryKeyRelatedField(queryset=Match.objects.all())
-    winner = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    match = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), view_name='match-detail')
+    winner = serializers.HyperlinkedRelatedField(queryset=User.objects.all(), view_name='user-detail')
 
     class Meta:
         model = Game
-        fields = ('game_id', 'match', 'winner', 'start_time', 'end_time')
+        fields = ('url', 'game_id', 'match', 'match_id', 'winner', 'winner_id', 'start_time', 'end_time')
 
     def create(self, validated_data):
         """
