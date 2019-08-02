@@ -1,7 +1,7 @@
 """
 Class-based API views using the Django REST Framework
 """
-from rest_framework import generics, permissions, renderers
+from rest_framework import generics, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,6 +12,11 @@ from . import serializers
 
 @api_view(['GET'])
 def api_root(request, format=None):
+    """
+    View for the API_root
+
+    :return: All the API endpoints that the user can navigate via hyperlinks
+    """
     return Response({
         'users': reverse('user-list', request=request, format=format),
         'tournaments': reverse('tournament-list', request=request, format=format),
