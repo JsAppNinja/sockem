@@ -17,12 +17,11 @@
 
 # POST /api/users/
 * The JSON body should match the form below. Password is 78 chars long is hashed using Django's default PBKDF2 algorithm.
-
 ```
 {
     "email": "admin@sockemboppem.com",
     "username": "admin",
-    "password": "pbkdf2_sha256$150000$529zbhCR1s71$uViN4aYhKfel/1Rpk9LtknaG1bW9uxDK2kfwvXHaa+Y=",
+    "password": "unhashedpassword",
     "avatar": someurlhere
 }
 ```
@@ -30,54 +29,61 @@
 # POST /api/tournaments/
 * The JSON body should match the form below, with `is_judge` indicating whether the tournament creator wishes to join
   as a judge.
+  
+* The `creator` field is missing from the request and filled out automatically based on the user tied to the 
+  authorization token
 ```
 {
-	"name": "Biggest Pasta Tournament",
+	"name": "Biggest's Pasta Tournament",
 	"start_date": "2019-07-29 21:51:23+00",
-	"creator": 2,
-	"users":
-		[{
+	"users": [
+		{
             "is_judge": false
-        }]
+        }
+    ]
 }
 ```
 
 # POST /api/tournament_users/
 * The JSON body should match the form below, with `is_judge` indicating whether the user is a judge in this tournament
+* The `user` field is missing from the request and filled out automatically based on the user tied to the 
+  authorization token
+* For the `tournament` field, send the URL instead of the raw primary key
 ```
 {
-    "user": 2,
-    "tournament": 2,
+    "tournament": "http://localhost:8000/api/tournaments/1",
     "is_judge": true
 }
 ```
 
 # POST /api/matches/
-* The JSON body should match the form below. `round` and `num_games` both need to be `>= 1`
+* The JSON body should match the form below. `round` need to be `>= 1`
+* For the `tournament` field, send the URL instead of the raw primary key
 
 ```
 {
-    "tournament": 1, 
+    "tournament": "http://localhost:8000/api/tournaments/1", 
     "round": 1
 }
 ```
 
 # POST /api/match_users/
 * The JSON body should match the form below. 
-
+* For the `user` and `match` fields, send the URLs instead of the raw primary keys
 ```
 {
-    "user": 1,
-    "match": 1
+    "user": "http://localhost:8000/api/users/5",
+    "match": "http://localhost:8000/api/matches/2"
 }
 ```
 
 # POST /api/games/
 * The JSON body should match the form below.
+* For the `match` and `winner` fields, send the URLs instead of the raw primary keys
 ```
 {
-    "match": 1,
-    "winner": 3,
+    "match": "http://localhost:8000/api/matches/2",
+    "winner": "http://localhost:8000/api/users/5",
     "start_time": "2019-07-30T20:56:49Z",
     "end_time": "2019-07-30T20:56:51Z"
 }
