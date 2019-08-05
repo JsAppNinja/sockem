@@ -78,6 +78,7 @@ class Match(models.Model):
         validators=[MaxValueValidator(100), MinValueValidator(1)]
     )
     users = models.ManyToManyField(User, through='MatchUser')
+    prev_matches = models.ManyToManyField('self', symmetrical=False, blank=True)
 
     class Meta:
         db_table = 'match'
