@@ -143,11 +143,24 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
         view_name='tournament-detail'
     )
     users = MatchUserSerializer(source='matchuser_set', read_only=True, many=True,)
-    prev_matches = serializers.HyperlinkedRelatedField(queryset=Match.objects.all(), read_only=False, many=True, view_name='match-detail',)
+    prev_matches = serializers.HyperlinkedRelatedField(
+        queryset=Match.objects.all(),
+        read_only=False,
+        many=True,
+        view_name='match-detail',
+    )
 
     class Meta:
         model = Match
-        fields = ('url', 'match_id', 'tournament', 'tournament_id', 'round', 'users', 'prev_matches',)
+        fields = (
+            'url',
+            'match_id',
+            'tournament',
+            'tournament_id',
+            'round',
+            'users',
+            'prev_matches',
+        )
 
     def create(self, validated_data):
         """

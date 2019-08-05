@@ -16,7 +16,8 @@
 `Authorization: Token be1314c3be8264b2f3b1a46de5fb9e05ef4e9808`
 
 # POST /api/users/
-* The JSON body should match the form below. Password is 78 chars long is hashed using Django's default PBKDF2 algorithm.
+* The JSON body should match the form below. 
+The password will get hashed automatically using Django's default PBKDF2 algorithm.
 ```
 {
     "email": "admin@sockemboppem.com",
