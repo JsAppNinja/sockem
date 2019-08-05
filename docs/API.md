@@ -59,11 +59,18 @@
 # POST /api/matches/
 * The JSON body should match the form below. `round` need to be `>= 1`
 * For the `tournament` field, send the URL instead of the raw primary key
+* Matches form a tree structure and via the `prev_matches` field.
+* The highest round number match should be at the root
+* `prev_matches` can be omitted from POST requests for leaf matches
 
 ```
 {
     "tournament": "http://localhost:8000/api/tournaments/1", 
-    "round": 1
+    "round": 4,
+    "prev_matches": [
+    	"http://localhost:8000/api/matches/12", 
+    	"http://localhost:8000/api/matches/7"
+	]
 }
 ```
 
