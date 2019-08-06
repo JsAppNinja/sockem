@@ -168,7 +168,7 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
         prev_matches = (*attrs['prev_matches'],)
         current_round = (attrs['round'])
         if prev_matches:
-            validate_prev_matches(prev_matches, current_round)
+            validate_prev_matches(self, prev_matches, current_round)
 
         return attrs
 

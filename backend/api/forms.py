@@ -21,5 +21,5 @@ class MatchForm(forms.ModelForm):
         prev_matches = self.cleaned_data.get('prev_matches')
         current_round = self.cleaned_data.get('round')
         if prev_matches:
-            validate_prev_matches(prev_matches, current_round)
+            validate_prev_matches(self, prev_matches, current_round)
         return self.cleaned_data
