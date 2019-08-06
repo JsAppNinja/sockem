@@ -63,6 +63,7 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
 * Matches form a tree structure and via the `prev_matches` field.
 * The highest round number match should be at the root
 * `prev_matches` can be omitted from POST requests for leaf matches
+* All `prev_matches` must also have `round` fields that are _**less than**_ the `round` field in the POST body
 
 ```
 {
