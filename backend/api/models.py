@@ -18,7 +18,7 @@ class User(AbstractUser):
     """
     user_id = models.AutoField(primary_key=True)
     email = models.EmailField(blank=False)
-    avatar = models.TextField(blank=True, null=True)
+    avatar = models.URLField(blank=True, null=True)
 
     class Meta:
         db_table = 'user'
@@ -78,7 +78,11 @@ class Match(models.Model):
         validators=[MaxValueValidator(100), MinValueValidator(1)]
     )
     users = models.ManyToManyField(User, through='MatchUser')
-    prev_matches = models.ManyToManyField('self', symmetrical=False, blank=True)
+    prev_matches = models.ManyToManyField(
+        'self',
+        symmetrical=False,
+        blank=True
+    )
 
     class Meta:
         db_table = 'match'

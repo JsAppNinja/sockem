@@ -13,6 +13,7 @@ after first validating the incoming data.
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
+from .util import validate_prev_matches
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -161,6 +162,15 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
             'users',
             'prev_matches',
         )
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)  # calling default validation
+        prev_matches = (*attrs['prev_matches'],)
+        current_round = (attrs['round'])
+        if prev_matches:
+            validate_prev_matches(self, prev_matches, current_round)
+
+        return attrs
 
     def create(self, validated_data):
         """

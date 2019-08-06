@@ -15,6 +15,9 @@
 
 `Authorization: Token be1314c3be8264b2f3b1a46de5fb9e05ef4e9808`
 
+# PUT requests
+* `PUT` requests work the same way as `POST` but the URL the request is sent to must point to the correct item
+
 # POST /api/users/
 * The JSON body should match the form below. 
 The password will get hashed automatically using Django's default PBKDF2 algorithm.
@@ -63,6 +66,7 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
 * Matches form a tree structure and via the `prev_matches` field.
 * The highest round number match should be at the root
 * `prev_matches` can be omitted from POST requests for leaf matches
+* All `prev_matches` must also have `round` fields that are _**less than**_ the `round` field in the POST body
 
 ```
 {
