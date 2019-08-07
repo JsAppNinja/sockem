@@ -63,19 +63,16 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
 # POST /api/matches/
 * The JSON body should match the form below. `round` need to be `>= 1`
 * For the `tournament` field, send the URL instead of the raw primary key
-* Matches form a tree structure and via the `prev_matches` field.
-* The highest round number match should be at the root
-* `prev_matches` can be omitted from POST requests for leaf matches
-* All `prev_matches` must also have `round` fields that are _**less than**_ the `round` field in the POST body
+* Matches form a tree structure and via the `parent` field.
+* The highest round number match should be at the root of the tree
+* `parent` can either point to another match or be left ass `null` or `""`
+* All `parent` matches must have `round` fields that are _**greater than**_ the `round` field in the POST body
 
 ```
 {
     "tournament": "http://localhost:8000/api/tournaments/1", 
-    "round": 4,
-    "prev_matches": [
-    	"http://localhost:8000/api/matches/12", 
-    	"http://localhost:8000/api/matches/7"
-	]
+    "round": 3,
+    "parent": "http://localhost:8000/api/matches/11"
 }
 ```
 

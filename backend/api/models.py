@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from rest_framework.authtoken.models import Token
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class User(AbstractUser):
@@ -69,7 +70,32 @@ class TournamentUser(models.Model):
         return str(self.__dict__)
 
 
-class Match(models.Model):
+# class Match(models.Model):
+#     """Match model. Round == the round in the tournament. Num_games == # games per match"""
+#     match_id = models.AutoField(primary_key=True)
+#     tournament = models.ForeignKey(Tournament, models.PROTECT)
+#     round = models.SmallIntegerField(
+#         default=1,
+#         validators=[MaxValueValidator(100), MinValueValidator(1)]
+#     )
+#     users = models.ManyToManyField(User, through='MatchUser')
+#     prev_matches = models.ManyToManyField(
+#         'self',
+#         symmetrical=False,
+#         blank=True
+#     )
+#
+#     class Meta:
+#         db_table = 'match'
+#
+#     def __str__(self):
+#         return '[%s] tournament: { %s }, round: %s' % \
+#                (self.match_id, self.tournament, self.round)
+#
+#     def __repr__(self):
+#         return str(self.__dict__)
+
+class Match(MPTTModel):
     """Match model. Round == the round in the tournament. Num_games == # games per match"""
     match_id = models.AutoField(primary_key=True)
     tournament = models.ForeignKey(Tournament, models.PROTECT)
@@ -78,14 +104,22 @@ class Match(models.Model):
         validators=[MaxValueValidator(100), MinValueValidator(1)]
     )
     users = models.ManyToManyField(User, through='MatchUser')
-    prev_matches = models.ManyToManyField(
+    parent = TreeForeignKey(
         'self',
-        symmetrical=False,
-        blank=True
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='children',
+        db_index=True
     )
 
     class Meta:
+        """Django class meta information"""
         db_table = 'match'
+
+    class MPTTMeta:
+        """MPTT class meta information"""
+        order_insertion_by = ['round']
 
     def __str__(self):
         return '[%s] tournament: { %s }, round: %s' % \
