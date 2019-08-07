@@ -114,9 +114,11 @@ class Match(MPTTModel):
     )
 
     class Meta:
+        """Django class meta information"""
         db_table = 'match'
 
     class MPTTMeta:
+        """MPTT class meta information"""
         order_insertion_by = ['round']
 
     def __str__(self):
