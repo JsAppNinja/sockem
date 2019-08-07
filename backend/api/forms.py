@@ -3,7 +3,7 @@ Contains forms used by the API app
 """
 from django import forms
 from .models import Match
-from .util import validate_prev_matches
+from .util import validate_parent
 
 
 class MatchForm(forms.ModelForm):
@@ -18,8 +18,8 @@ class MatchForm(forms.ModelForm):
         """
         Checks that all the prev_matches are valid and form a tree based on 'round'.
         """
-        prev_matches = self.cleaned_data.get('prev_matches')
+        parent = self.cleaned_data.get('parent')
         current_round = self.cleaned_data.get('round')
-        if prev_matches:
-            validate_prev_matches(self, prev_matches, current_round)
+        if parent:
+            validate_parent(self, parent, current_round)
         return self.cleaned_data

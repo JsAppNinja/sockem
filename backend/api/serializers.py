@@ -13,7 +13,7 @@ after first validating the incoming data.
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
-from .util import validate_prev_matches
+from .util import validate_parent
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -144,12 +144,12 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
         view_name='tournament-detail'
     )
     users = MatchUserSerializer(source='matchuser_set', read_only=True, many=True,)
-    prev_matches = serializers.HyperlinkedRelatedField(
-        queryset=Match.objects.all(),
-        read_only=False,
-        many=True,
-        view_name='match-detail',
-    )
+    # prev_matches = serializers.HyperlinkedRelatedField(
+    #     queryset=Match.objects.all(),
+    #     read_only=False,
+    #     many=True,
+    #     view_name='match-detail',
+    # )
 
     class Meta:
         model = Match
@@ -160,30 +160,31 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
             'tournament_id',
             'round',
             'users',
-            'prev_matches',
+            'parent',
+            # 'prev_matches',
         )
 
     def validate(self, attrs):
         attrs = super().validate(attrs)  # calling default validation
-        prev_matches = (*attrs['prev_matches'],)
+        parent = (attrs['parent'])
         current_round = (attrs['round'])
-        if prev_matches:
-            validate_prev_matches(self, prev_matches, current_round)
+        if parent:
+            validate_parent(self, parent, current_round)
 
         return attrs
 
-    def create(self, validated_data):
-        """
-        Create and return a new `Match` instance, given the validated data.
-        """
-        prev_matches = (*validated_data["prev_matches"],)
-        match = Match.objects.create(
-            tournament=validated_data['tournament'],
-            round=validated_data['round'],
-        )
-        for prev_match in prev_matches:
-            match.prev_matches.add(prev_match)
-        return match
+    # def create(self, validated_data):
+    #     """
+    #     Create and return a new `Match` instance, given the validated data.
+    #     """
+    #     prev_matches = (*validated_data["prev_matches"],)
+    #     match = Match.objects.create(
+    #         tournament=validated_data['tournament'],
+    #         round=validated_data['round'],
+    #     )
+    #     for prev_match in prev_matches:
+    #         match.prev_matches.add(prev_match)
+    #     return match
 
 
 class GameSerializer(serializers.HyperlinkedModelSerializer):
