@@ -1,6 +1,10 @@
 """
 Tests for the API app
 """
-from django.test import TestCase
 
-# Create your tests here.
+
+def tests_function_as_expected():
+    """
+    Initial test to ensure pytest is working
+    """
+    assert True
