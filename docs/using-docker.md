@@ -1,7 +1,7 @@
 # Using Docker
 
 ## Entering a container via CLI
-* For bash on windows, use `$ winpty docker exec -it sockem-boppem_backend_1 //bin//sh`
+* For bash on windows, use `winpty docker exec -it sockem-boppem_backend_1 //bin//sh`
 * Otherwise try `docker exec -it <container name> /bin/bash`
 
 ### Tools
