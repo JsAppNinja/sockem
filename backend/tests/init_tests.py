@@ -1,7 +1,5 @@
 """
-Tests for the API app
-
-Function with names starting with `test_` will automatically get recognized by pytest
+initial tests not bound to any app or specific set of features
 """
 
 
