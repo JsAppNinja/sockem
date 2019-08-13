@@ -1,5 +1,5 @@
 """
-Unit tests for the API app
+Unit tests for the User model in the API app
 """
 
 import pytest
@@ -15,8 +15,6 @@ class UserTests:
         """Test that we can insert a user"""
         user = UserFactory()
 
-        print(user)
-
-        assert user.user_id == 1
+        assert user.user_id == 3
         assert user.username is not None
         assert user.email == user.username + '@sockemboppem.com'
