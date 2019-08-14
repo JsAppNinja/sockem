@@ -1,8 +1,12 @@
 """
 Factories used for testing models
 """
+from django.utils import timezone
+
 from datetime import datetime
+import pytz
 import factory
+import factory.fuzzy
 from ..models import User, Tournament
 
 
@@ -26,7 +30,7 @@ class TournamentFactory(factory.django.DjangoModelFactory):
         model = Tournament
 
     name = factory.Sequence(lambda n: 'tournament{0}'.format(n))
-    start_date = factory.LazyFunction(datetime.today)
+    start_date = factory.fuzzy.FuzzyDateTime(datetime.now(tz=pytz.timezone('UTC')))
     creator = factory.SubFactory(UserFactory)
 
     @factory.post_generation

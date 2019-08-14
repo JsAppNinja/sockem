@@ -45,8 +45,13 @@ class Tournament(models.Model):
         db_table = 'tournament'
 
     def __str__(self):
-        return '[%s] name: %s' % \
-               (self.tournament_id, self.name)
+        return '[{0}] name: {1}, start_date: {2}, creator: {3}, users: {4}'.format(
+            self.tournament_id,
+            self.name,
+            self.start_date,
+            self.creator.user_id,
+            self.users
+        )
 
     def __repr__(self):
         return str(self.__dict__)
