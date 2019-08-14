@@ -76,6 +76,17 @@ class MatchFactory(factory.django.DjangoModelFactory):
                 self.users.add(user)
 
 
+class MatchUserFactory(factory.django.DjangoModelFactory):
+    """
+    Factory for MatchUser models
+    """
+    class Meta:
+        model = MatchUser
+
+    user = factory.SubFactory(UserFactory)
+    match = factory.SubFactory(MatchFactory)
+
+
 class GameFactory(factory.django.DjangoModelFactory):
     """
     Factory for Game models
