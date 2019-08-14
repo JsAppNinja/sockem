@@ -22,6 +22,7 @@ class MatchTests:
         assert Match.objects.count() == 1
         assert 1 <= match.round <= 100
         assert match.parent is None
+        assert match.users is not None
         assert MatchUser.objects.count() == 1
 
         for user in match.users.all():
