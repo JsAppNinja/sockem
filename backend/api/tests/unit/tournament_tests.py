@@ -4,8 +4,10 @@ Unit tests for the Tournament model in the API app
 
 from datetime import datetime
 import pytest
+import pytz
 from api.tests.factories import UserFactory, TournamentFactory
 from api.tests.unit.user_tests import UserTests
+from api.models import Tournament
 
 
 class TournamentTests:
@@ -19,9 +21,10 @@ class TournamentTests:
             users=[UserFactory()]
         )
 
-        assert tournament.tournament_id == 1
+        assert Tournament.objects.count() == 1
         assert tournament.name is not None
         assert tournament.start_date is not None
+        assert tournament.start_date < datetime.now(tz=pytz.timezone('UTC'))
         assert tournament.creator is not None
         assert tournament.users is not None
 
