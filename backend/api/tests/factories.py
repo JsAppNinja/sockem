@@ -7,7 +7,7 @@ from datetime import datetime
 import pytz
 import factory
 import factory.fuzzy
-from ..models import User, Tournament
+from ..models import User, Tournament, Match, Game
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -41,3 +41,37 @@ class TournamentFactory(factory.django.DjangoModelFactory):
         if extracted:
             for user in extracted:
                 self.users.add(user)
+
+
+class MatchFactory(factory.django.DjangoModelFactory):
+    """
+    Factory for Match models
+    """
+    class Meta:
+        model = Match
+
+    tournament = factory.SubFactory(TournamentFactory)
+    round = 1
+
+    @factory.post_generation
+    def users(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            for user in extracted:
+                self.users.add(user)
+
+
+class GameFactory(factory.django.DjangoModelFactory):
+    """
+    Factory for Game models
+    """
+
+    class Meta:
+        model = Game
+
+    match = factory.SubFactory(MatchFactory)
+    winner = factory.SubFactory(UserFactory)
+    start_time = factory.fuzzy.FuzzyDateTime(datetime.now(tz=pytz.timezone('UTC')))
+    end_time = factory.fuzzy.FuzzyDateTime(datetime.now(tz=pytz.timezone('UTC')))
