@@ -7,7 +7,7 @@ from datetime import datetime
 import pytz
 import factory
 import factory.fuzzy
-from ..models import User, Tournament, Match, Game
+from ..models import User, Tournament, TournamentUser, Match, MatchUser, Game
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -43,6 +43,19 @@ class TournamentFactory(factory.django.DjangoModelFactory):
                 self.users.add(user)
 
 
+class TournamentUserFactory(factory.django.DjangoModelFactory):
+    """
+    Factory for TournamentUser models
+    """
+
+    class Meta:
+        model = TournamentUser
+
+    user = factory.SubFactory(UserFactory)
+    tournament = factory.SubFactory(TournamentFactory)
+    is_judge = True
+
+
 class MatchFactory(factory.django.DjangoModelFactory):
     """
     Factory for Match models
@@ -61,6 +74,17 @@ class MatchFactory(factory.django.DjangoModelFactory):
         if extracted:
             for user in extracted:
                 self.users.add(user)
+
+
+class MatchUserFactory(factory.django.DjangoModelFactory):
+    """
+    Factory for MatchUser models
+    """
+    class Meta:
+        model = MatchUser
+
+    user = factory.SubFactory(UserFactory)
+    match = factory.SubFactory(MatchFactory)
 
 
 class GameFactory(factory.django.DjangoModelFactory):
