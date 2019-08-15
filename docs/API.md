@@ -26,7 +26,7 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
     "email": "admin@sockemboppem.com",
     "username": "admin",
     "password": "unhashedpassword",
-    "avatar": someurlhere
+    "avatar": "http://sockemboppem.com/some-valid-url"
 }
 ```
 
