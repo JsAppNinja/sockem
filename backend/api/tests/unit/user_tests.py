@@ -20,8 +20,16 @@ class UserTests:
         assert User.objects.count() == 1
         assert user.username is not None
         assert self.is_valid_generated_username(user.username)
-        assert user.email == user.username + '@sockemboppem.com'
+        assert self.is_valid_generated_email(user.username, user.email)
 
     @staticmethod
     def is_valid_generated_username(username):
         return re.match(r'user\d+$', username)
+
+    @staticmethod
+    def is_valid_generated_email(username, email):
+        return username + '@sockemboppem.com' == email
+
+    @staticmethod
+    def does_url_match_user_id(url, user_id):
+        return int(url.path.split("/")[3]) == user_id
