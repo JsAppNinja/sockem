@@ -5,7 +5,7 @@
 
 ```
 {
-    "username": "admin",
+    "email_or_username": "admin",
     "password": "password"
 }
 ```

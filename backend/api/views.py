@@ -1,11 +1,18 @@
 """
 Class-based API views using the Django REST Framework
 """
+
 from rest_framework import generics, permissions
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.views import APIView
+
+
 from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
 from . import serializers
 
@@ -145,3 +152,27 @@ class GameDetail(generics.RetrieveUpdateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Game.objects.all()
     serializer_class = serializers.GameSerializer
+
+
+class ObtainAuthToken(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    parser_classes = (
+        FormParser,
+        MultiPartParser,
+        JSONParser,
+    )
+
+    renderer_classes = (JSONRenderer,)
+
+    def post(self, request):
+        serializer = serializers.AuthCustomTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+
+        content = {
+            'token': str(token.key),
+        }
+
+        return Response(content)

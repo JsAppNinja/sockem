@@ -25,3 +25,18 @@ def validate_parent(self, parent, current_round):
             "The match '{0}' has a round of '{1}' "
             "which is less than or equal to "
             "the current round of '{2}'".format(parent, parent.round, current_round))
+
+
+def validate_email(email):
+    """
+    Validates a given email based on regex
+
+    :param email: email to be validated
+    :return:
+    """
+    from django.core.validators import validate_email
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False

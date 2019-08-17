@@ -9,11 +9,13 @@ JSON, XML or other content types.
 Also provide deserialization, allowing parsed data to be converted back into complex types,
 after first validating the incoming data.
 """
-
+from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from .models import User, Tournament, TournamentUser, Match, MatchUser, Game
-from .util import validate_parent
+from .util import validate_parent, validate_email
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -219,3 +221,37 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
         """
         game = Game.objects.create(**validated_data)
         return game
+
+
+class AuthCustomTokenSerializer(serializers.Serializer):
+    email_or_username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        email_or_username = attrs.get('email_or_username')
+        password = attrs.get('password')
+
+        if email_or_username and password:
+            # Check if user sent email
+            if validate_email(email_or_username):
+                user_request = get_object_or_404(
+                    User,
+                    email=email_or_username,
+                )
+
+                email_or_username = user_request.username
+
+            user = authenticate(username=email_or_username, password=password)
+
+            if user:
+                if not user.is_active:
+                    raise ValidationError('User account is disabled.')
+            else:
+                raise ValidationError('Unable to log in with provided credentials.')
+        else:
+            raise ValidationError('Must include "email or username" and "password"')
+
+        attrs['user'] = user
+        return attrs
+
+
