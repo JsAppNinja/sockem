@@ -224,6 +224,12 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AuthCustomTokenSerializer(serializers.Serializer):
+    def update(self, instance, validated_data):
+        pass
+
+    def create(self, validated_data):
+        pass
+
     email_or_username = serializers.CharField()
     password = serializers.CharField()
 
@@ -253,5 +259,3 @@ class AuthCustomTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
-
-

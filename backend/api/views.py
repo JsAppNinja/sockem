@@ -155,6 +155,7 @@ class GameDetail(generics.RetrieveUpdateAPIView):
 
 
 class ObtainAuthToken(APIView):
+    """ Used to get a token based on either username or email """
     throttle_classes = ()
     permission_classes = ()
     parser_classes = (
@@ -166,6 +167,7 @@ class ObtainAuthToken(APIView):
     renderer_classes = (JSONRenderer,)
 
     def post(self, request):
+        """ Send post request for token"""
         serializer = serializers.AuthCustomTokenSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
