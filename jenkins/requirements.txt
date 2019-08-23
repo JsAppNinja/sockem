@@ -1,0 +1,4 @@
+astroid>=2.2,<3.0
+pylint>=2.0,<3.0
+pytest>=5.0,<6.0
+pytest-django>=3.5,<4.0

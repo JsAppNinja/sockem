@@ -6,7 +6,6 @@ Note that all the paths below are preceded by
 """
 from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
-from rest_framework.authtoken import views as auth_views
 from . import views
 
 urlpatterns = [
@@ -25,7 +24,7 @@ urlpatterns = [
     path('match_users/<int:pk>', views.MatchUserDetail.as_view(), name='matchuser-detail'),
     path('games/', views.GameList.as_view(), name='game-list'),
     path('games/<int:pk>', views.GameDetail.as_view(), name='game-detail'),
-    path('api-token-auth/', auth_views.obtain_auth_token, name='get-token'),
+    path('api-token-auth/', views.ObtainAuthToken.as_view(), name='get-token'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
