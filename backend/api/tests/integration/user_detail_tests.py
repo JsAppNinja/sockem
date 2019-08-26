@@ -11,16 +11,17 @@ from api.models import User
 
 
 class UserDetailTests(APITestCase):
+
     def setUp(self):
         self.user = UserFactory()
         self.token = Token.objects.get(user_id=self.user.user_id)
+        self.url = reverse('user-detail', kwargs={'pk': self.user.user_id})
 
     def test_get_user_detail(self):
         """
         Tests GET UserDetail view
         """
-        url = reverse('user-detail', kwargs={'pk': self.user.user_id})
-        response = self.client.get(url)
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['user_id'], self.user.user_id)
         self.assertEqual(response.data['email'], self.user.email)
@@ -31,8 +32,6 @@ class UserDetailTests(APITestCase):
         """
         Tests PUT UserDetail view
         """
-        url = reverse('user-detail', kwargs={'pk': self.user.user_id})
-
         old_email = self.user.email
         old_username = self.user.username
         old_password = self.user.password
@@ -50,7 +49,7 @@ class UserDetailTests(APITestCase):
             "avatar": put_avatar
         }
 
-        response = self.client.put(url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -71,9 +70,7 @@ class UserDetailTests(APITestCase):
         """
         Tests DELETE UserDetail view
         """
-        url = reverse('user-detail', kwargs={'pk': self.user.user_id})
-
-        response = self.client.delete(url, HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.delete(self.url, HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 

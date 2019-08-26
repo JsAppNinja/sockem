@@ -224,6 +224,9 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AuthCustomTokenSerializer(serializers.Serializer):
+    """
+    Customer serializer for tokens used to take either email or username
+    """
     def update(self, instance, validated_data):
         pass
 
