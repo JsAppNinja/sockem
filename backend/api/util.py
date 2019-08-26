@@ -1,6 +1,7 @@
 """
 Contains misc and util functions used by multiple files in the app
 """
+import re
 from django.core.exceptions import ValidationError
 
 
@@ -32,7 +33,6 @@ def validate_email(email):
     Validates a given email based on regex
 
     :param email: email to be validated
-    :return:
     """
     from django.core.validators import validate_email
     try:
@@ -40,3 +40,16 @@ def validate_email(email):
         return True
     except ValidationError:
         return False
+
+
+def validate_token(token):
+    """
+    Validates a given token based on regex
+
+    :param token: token string
+    """
+    if not re.match('[a-z0-9-]*', token):
+        raise ValidationError("Token does not match regex")
+
+    if len(token) != 40:
+        raise ValidationError("Token length is incorrect")
