@@ -66,3 +66,18 @@ class UserDetailTests(APITestCase):
         user = User.objects.get(user_id=self.user.user_id)
         self.assertNotEqual(user.password, old_password)
         self.assertEqual(user.password, put_password)
+
+    def test_delete_user_detail(self):
+        """
+        Tests DELETE UserDetail view
+        """
+        url = reverse('user-detail', kwargs={'pk': self.user.user_id})
+
+        response = self.client.delete(url, HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        self.assertEqual(User.objects.count(), 1)
+        user = User.objects.get(user_id=self.user.user_id)
+        self.assertIsNotNone(user)
+
