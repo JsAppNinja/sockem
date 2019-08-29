@@ -31,20 +31,15 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
 ```
 
 # POST /api/tournaments/
-* The JSON body should match the form below, with `is_judge` indicating whether the tournament creator wishes to join
-  as a judge.
-  
+* The JSON body should match the form below.
+* Note that ```users``` must be a blank array (for now)
 * The `creator` field is missing from the request and filled out automatically based on the user tied to the 
   authorization token
 ```
 {
 	"name": "Biggest's Pasta Tournament",
 	"start_date": "2019-07-29 21:51:23+00",
-	"users": [
-		{
-            "is_judge": false
-        }
-    ]
+	"users": []    # LEAVE BLANK
 }
 ```
 
