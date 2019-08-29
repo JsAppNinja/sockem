@@ -53,3 +53,7 @@ def validate_token(token):
 
     if len(token) != 40:
         raise ValidationError("Token length is incorrect")
+
+
+def does_url_match_id(url, id):
+    return int(url.path.split("/")[3]) == id

@@ -102,13 +102,13 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
         user_data = validated_data.pop('tournamentuser_set')
         validated_data['creator'] = self.context['request'].user
         tournament = Tournament.objects.create(**validated_data)
-        tournament_user = \
-            TournamentUser.objects.create(
-                user=validated_data['creator'],
-                tournament=tournament,
-                is_judge=user_data[0]['is_judge']
-            )
-        tournament_user.save()
+        # tournament_user = \
+        #     TournamentUser.objects.create(
+        #         user=validated_data['creator'],
+        #         tournament=tournament,
+        #         is_judge=user_data[0]['is_judge']
+        #     )
+        # tournament_user.save()
         return tournament
 
 

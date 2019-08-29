@@ -39,7 +39,8 @@ class Tournament(models.Model):
     start_date = models.DateTimeField(blank=True, null=True)
     creator = \
         models.ForeignKey(User, on_delete=models.PROTECT, related_name='tournament_creator_id')
-    users = models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users')
+    users = \
+        models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users', blank=True, null=True)
 
     class Meta:
         db_table = 'tournament'
