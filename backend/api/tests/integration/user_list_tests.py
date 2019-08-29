@@ -9,6 +9,7 @@ from rest_framework.test import APITestCase
 from api.tests.factories import UserFactory
 from api.tests.unit.user_tests import UserTests
 from api.models import User
+from api.util import does_url_match_id
 
 
 class UserListTests(APITestCase):
@@ -64,6 +65,6 @@ class UserListTests(APITestCase):
         self.assertEqual(response.data['count'], 1)
 
         returned_user = response.data['results'][0]
-        self.assertTrue(UserTests.does_url_match_user_id(urlparse(returned_user['url']), returned_user['user_id']))
+        self.assertTrue(does_url_match_id(urlparse(returned_user['url']), returned_user['user_id']))
         self.assertTrue(UserTests.is_valid_generated_username(returned_user['username']))
         self.assertTrue(UserTests.is_valid_generated_email(returned_user['username'], returned_user['email']))
