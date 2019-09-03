@@ -36,7 +36,6 @@ class TournamentListTests(APITestCase):
         data = {
             "name": "Biggest's Pasta Tournament",
             "start_date": "2019-07-29T21:51:23Z",
-            "users": []
         }
 
         response = self.client.post(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
