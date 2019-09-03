@@ -32,14 +32,22 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
 
 # POST /api/tournaments/
 * The JSON body should match the form below.
-* Note that ```users``` must be a blank array (for now)
 * The `creator` field is missing from the request and filled out automatically based on the user tied to the 
   authorization token
 ```
 {
-	"name": "Biggest's Pasta Tournament",
+	"name": "Biggest Pasta Tournament",
 	"start_date": "2019-07-29 21:51:23+00",
-	"users": []    # LEAVE BLANK
+}
+```
+
+# PUT /api/tournaments/
+* The JSON body should match the form below.
+* Both ```name``` and ```start_date``` fields are optional and one should only include the fields that are being changed. 
+```
+{
+	"name": "Biggest's Pasta's Tournament's",
+	"start_date": "2006-06-06 21:51:23+00"
 }
 ```
 
