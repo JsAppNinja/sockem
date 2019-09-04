@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from api.tests.factories import UserFactory, TournamentFactory
-from api.models import User
+from api.models import Tournament
 
 
 class TournamentDetailTests(APITestCase):
@@ -57,14 +57,14 @@ class TournamentDetailTests(APITestCase):
         self.assertNotEqual(response.data['name'], old_name)
         self.assertNotEqual(response.data['start_date'], old_start_date)
 
-    # def test_delete_user_detail(self):
-    #     """
-    #     Tests DELETE UserDetail view
-    #     """
-    #     response = self.client.delete(self.url, HTTP_AUTHORIZATION='Token ' + self.token.key)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-    #
-    #     self.assertEqual(User.objects.count(), 1)
-    #     user = User.objects.get(user_id=self.user.user_id)
-    #     self.assertIsNotNone(user)
+    def test_delete_Tournament_detail(self):
+        """
+        Tests DELETE TournamentDetail view
+        """
+        response = self.client.delete(self.url, HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+        self.assertEqual(Tournament.objects.count(), 1)
+        tournament = Tournament.objects.get(tournament_id=self.tournament.tournament_id)
+        self.assertIsNotNone(tournament)
