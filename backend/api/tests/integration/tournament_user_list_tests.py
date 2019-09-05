@@ -67,18 +67,25 @@ class TournamentUserListTests(APITestCase):
         self.assertEqual(inserted_tournament_user['tournament_id'], self.tournament.tournament_id)
         self.assertEqual(inserted_tournament_user['is_judge'], data['is_judge'])
 
+    def test_get_tournament_user(self):
+        """
+        Tests GET TournamentUserList view
+        """
 
-    # def test_get_user(self):
-    #     """
-    #     Tests GET UserList view
-    #     """
-    #
-    #     response = self.client.get(self.url, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(User.objects.count(), 1)
-    #     self.assertEqual(response.data['count'], 1)
-    #
-    #     returned_user = response.data['results'][0]
-    #     self.assertTrue(does_url_match_id(urlparse(returned_user['url']), returned_user['user_id']))
-    #     self.assertTrue(UserTests.is_valid_generated_username(returned_user['username']))
-    #     self.assertTrue(UserTests.is_valid_generated_email(returned_user['username'], returned_user['email']))
+        response = self.client.get(self.url, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(TournamentUser.objects.count(), 1)
+        self.assertEqual(response.data['count'], 1)
+
+        returned_tournament_user = response.data['results'][0]
+        self.assertTrue(
+            does_url_match_id(
+                urlparse(returned_tournament_user['url']),
+                returned_tournament_user['tournament_user_id']
+            )
+        )
+        self.assertTrue(returned_tournament_user["user"] is not None)
+        self.assertTrue(returned_tournament_user['user_id'] >= 1)
+        self.assertTrue(returned_tournament_user["tournament"] is not None)
+        self.assertTrue(returned_tournament_user['tournament_id'] >= 1)
+        self.assertTrue(returned_tournament_user['is_judge'])
