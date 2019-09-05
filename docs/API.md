@@ -62,6 +62,18 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
     "is_judge": true
 }
 ```
+* Returns
+```
+{
+    "url": "http://localhost:8000/api/tournament_users/2",
+    "tournament_user_id": 2,
+    "user": "http://localhost:8000/api/users/1",
+    "user_id": 1,
+    "tournament": "http://localhost:8000/api/tournaments/1",
+    "tournament_id": 1,
+    "is_judge": true
+}
+```
 
 # POST /api/matches/
 * The JSON body should match the form below. `round` need to be `>= 1`
