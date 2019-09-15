@@ -87,29 +87,36 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for Tournament model
     """
-    users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True,)
+    users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True, required=False)
     creator = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
 
     class Meta:
         model = Tournament
         fields = ('url', 'tournament_id', 'name', 'start_date', 'creator', 'creator_id', 'users',)
+        extra_kwargs = {
+            'user_id': {
+                'read_only': False,
+                'required': True
+            }
+        }
         depth = 1
 
     def create(self, validated_data):
         """
         Create and return a new `Tournament` instance, given the validated data.
         """
-        user_data = validated_data.pop('tournamentuser_set')
         validated_data['creator'] = self.context['request'].user
         tournament = Tournament.objects.create(**validated_data)
-        tournament_user = \
-            TournamentUser.objects.create(
-                user=validated_data['creator'],
-                tournament=tournament,
-                is_judge=user_data[0]['is_judge']
-            )
-        tournament_user.save()
         return tournament
+
+    def update(self, instance, validated_data):
+        if 'name' in validated_data:
+            instance.name = validated_data['name']
+        if 'start_date' in validated_data:
+            instance.start_date = validated_data['start_date']
+        instance.save()
+
+        return instance
 
 
 class MatchUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -146,12 +153,6 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
         view_name='tournament-detail'
     )
     users = MatchUserSerializer(source='matchuser_set', read_only=True, many=True,)
-    # prev_matches = serializers.HyperlinkedRelatedField(
-    #     queryset=Match.objects.all(),
-    #     read_only=False,
-    #     many=True,
-    #     view_name='match-detail',
-    # )
 
     class Meta:
         model = Match
@@ -163,7 +164,6 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
             'round',
             'users',
             'parent',
-            # 'prev_matches',
         )
 
     def validate(self, attrs):
@@ -174,19 +174,6 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
             validate_parent(self, parent, current_round)
 
         return attrs
-
-    # def create(self, validated_data):
-    #     """
-    #     Create and return a new `Match` instance, given the validated data.
-    #     """
-    #     prev_matches = (*validated_data["prev_matches"],)
-    #     match = Match.objects.create(
-    #         tournament=validated_data['tournament'],
-    #         round=validated_data['round'],
-    #     )
-    #     for prev_match in prev_matches:
-    #         match.prev_matches.add(prev_match)
-    #     return match
 
 
 class GameSerializer(serializers.HyperlinkedModelSerializer):
@@ -224,6 +211,9 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AuthCustomTokenSerializer(serializers.Serializer):
+    """
+    Customer serializer for tokens used to take either email or username
+    """
     def update(self, instance, validated_data):
         pass
 

@@ -29,7 +29,3 @@ class UserTests:
     @staticmethod
     def is_valid_generated_email(username, email):
         return username + '@sockemboppem.com' == email
-
-    @staticmethod
-    def does_url_match_user_id(url, user_id):
-        return int(url.path.split("/")[3]) == user_id
