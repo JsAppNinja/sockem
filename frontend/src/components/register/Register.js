@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
 import axios from "axios";
 
-const url = "";
+const url = process.env.REACT_APP_API_USERS_URL;
 
 class Register extends Component {
   state = {
@@ -24,7 +24,7 @@ class Register extends Component {
   }
 
   validateUsername() {
-    const re = /[^A-Za-z0-9]+/;
+    const re = /^[A-Za-z0-9]+$/;
     let message = "";
     if (!re.test(this.state.username)) {
       message += "Invalid username form.\n";
@@ -36,8 +36,8 @@ class Register extends Component {
   }
 
   validatePassword() {
-    const allNums = /[^0-9]+/;
-    const allChar = /[^A-Za-z]+/;
+    const allNums = /^[0-9]+$/;
+    const allChar = /^[a-zA-Z]+$/;
     let message = "";
     if (allNums.test(this.state.password)) {
       message += "Invalid password. Password cannot be all numbers.\n";
@@ -77,9 +77,10 @@ class Register extends Component {
     } else {
       axios
         .post(url, {
-          email: this.state.email,
-          username: this.state.username,
-          password: this.state.password
+          "email": this.state.email,
+          "username": this.state.username,
+          "password": this.state.password,
+          "avatar": ""
         })
         .then(response => {
           alert("Registration successful!");
