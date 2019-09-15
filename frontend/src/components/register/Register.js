@@ -77,10 +77,10 @@ class Register extends Component {
     } else {
       axios
         .post(url, {
-          "email": this.state.email,
-          "username": this.state.username,
-          "password": this.state.password,
-          "avatar": ""
+          email: this.state.email,
+          username: this.state.username,
+          password: this.state.password,
+          avatar: null
         })
         .then(response => {
           alert("Registration successful!");
