@@ -9,7 +9,6 @@
   Note that this does not refer to docstrings and the like
   
 * Most importantly, refer to the [Google Style Guides](https://github.com/google/styleguide)
-
 ## Language Specific
 ### HTML
 * Indentation: 2 spaces
@@ -18,6 +17,8 @@
 ### Javascript
 * Indentation: 2 spaces
 * Run [Prettier](https://prettier.io/) on all .js files that have been edited
+* Prettier can be run over all files in a specific directory by using ``` prettier --write "**/*.js" ```
+* ATM there are issues with running prettier from within a Docker container so this should be installed locally
 ### Python
 * Run [Pylint](https://www.pylint.org/) on all .py files that have been edited
 * Should also install pylint-django using `pip install pylint-django` and 

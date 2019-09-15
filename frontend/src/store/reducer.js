@@ -1,9 +1,9 @@
 const initialState = {
-    someState: 0
-}
+  someState: 0
+};
 
-const reducer = (state = initialState , action) => {
-    return state;
-}
+const reducer = (state = initialState, action) => {
+  return state;
+};
 
 export default reducer;

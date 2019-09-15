@@ -5,7 +5,7 @@ Class-based API views using the Django REST Framework
 from rest_framework import generics, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
@@ -33,7 +33,7 @@ def api_root(request, format=None):
         'games': reverse('game-list', request=request, format=format),
     })
 
-
+@permission_classes([])
 class UserList(generics.ListCreateAPIView):
     """
     List all users, or create a new user.
