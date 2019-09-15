@@ -12,7 +12,7 @@ class Register extends Component {
   };
 
   validateEmail() {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     let message = "";
     if (!re.test(this.state.email.toLowerCase())) {
       message += "Invalid email form.\n";
@@ -102,21 +102,21 @@ class Register extends Component {
             placeholder="email"
             required
             onChange={this.handleEmail}
-          />{" "}
+          />
           <br />
           <input
             type="text"
             placeholder="username"
             required
             onChange={this.handleUsername}
-          />{" "}
+          />
           <br />
           <input
             type="password"
             placeholder="password"
             required
             onChange={this.handlePassword}
-          />{" "}
+          />
           <br />
           <button className="Register-submit btn btn-secondary" type="submit">
             Register
