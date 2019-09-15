@@ -27,6 +27,9 @@ services:
       - node-modules:/app/frontend/node_modules
     ports:
       - "3000:3000"
+    env_file:
+      - ./frontend/frontend-dev.env
+
 
   jenkins:
     build: ./jenkins

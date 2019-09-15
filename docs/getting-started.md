@@ -18,6 +18,7 @@ https://hub.docker.com/editions/community/docker-ce-desktop-mac
 
 * The frontend React app will be live on ```localhost:3000```
 * The backend Django app will be live on ```localhost:8000```
+* The PostgreSQL database will be live on ```localhost:5432```
 * The Jenkins server will be live on ```localhost:8080```
 * The pgAdmin server will be live on ```localhost:5555```
 
