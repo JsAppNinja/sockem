@@ -1,10 +1,21 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
+import { RouteComponentProps } from "react-router";
 import axios from "axios";
 
-const url = process.env.REACT_APP_API_USERS_URL;
+const url: string = process.env.REACT_APP_API_USERS_URL as string;
 
-class Register extends Component {
+// Type whatever you expect in 'this.props.match.params.*'
+type PathParamsType = {
+    // param1: string,
+}
+
+// Your component own properties
+type PropsType = RouteComponentProps<PathParamsType> & {
+    // someString: string,
+}
+
+class Register extends React.Component<PropsType> {
   state = {
     email: "",
     username: "",
@@ -52,19 +63,19 @@ class Register extends Component {
     return message;
   }
 
-  handleEmail = event => {
-    this.setState({ email: event.target.value });
+  handleEmail = (event: React.FormEvent<HTMLInputElement>): void => {
+    this.setState({ email: (event.target as HTMLTextAreaElement).value });
   };
 
-  handleUsername = event => {
-    this.setState({ username: event.target.value });
+  handleUsername = (event: React.FormEvent<HTMLInputElement>): void => {
+    this.setState({ username: (event.target as HTMLTextAreaElement).value });
   };
 
-  handlePassword = event => {
-    this.setState({ password: event.target.value });
+  handlePassword = (event: React.FormEvent<HTMLInputElement>): void => {
+    this.setState({ password: (event.target as HTMLTextAreaElement).value });
   };
 
-  handleSubmit = event => {
+  handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     let errorMessage = "";
