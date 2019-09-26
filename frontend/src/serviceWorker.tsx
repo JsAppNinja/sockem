@@ -48,13 +48,13 @@ export function register(config: any) {
         });
       } else {
         // Is not localhost. Just register service worker
-        registerValidSW({swUrl: swUrl, config: config});
+        registerValidSW({ swUrl: swUrl, config: config });
       }
     });
   }
 }
 
-function registerValidSW({swUrl, config}: { swUrl: any, config: any }) {
+function registerValidSW({ swUrl, config }: { swUrl: any; config: any }) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
@@ -116,7 +116,7 @@ function checkValidServiceWorker(swUrl: RequestInfo, config: any) {
         });
       } else {
         // Service worker found. Proceed as normal.
-        registerValidSW({swUrl: swUrl, config: config});
+        registerValidSW({ swUrl: swUrl, config: config });
       }
     })
     .catch(() => {

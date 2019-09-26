@@ -4,13 +4,13 @@ import { RouteComponentProps } from "react-router";
 
 // Type whatever you expect in 'this.props.match.params.*'
 type PathParamsType = {
-    // param1: string,
-}
+  // param1: string,
+};
 
 // Your component own properties
 type PropsType = RouteComponentProps<PathParamsType> & {
-    // someString: string,
-}
+  // someString: string,
+};
 
 class Navbar extends React.Component<PropsType> {
   render() {

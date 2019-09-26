@@ -18,7 +18,7 @@ from . import serializers
 
 
 @api_view(['GET'])
-def api_root(request, format=None):
+def api_root(request):
     """
     View for the API_root
 
@@ -32,6 +32,7 @@ def api_root(request, format=None):
         'match_users': reverse('matchuser-list', request=request, format=format),
         'games': reverse('game-list', request=request, format=format),
     })
+
 
 @permission_classes([])
 class UserList(generics.ListCreateAPIView):

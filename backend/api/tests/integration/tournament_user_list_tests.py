@@ -16,8 +16,8 @@ class TournamentUserListTests(APITestCase):
 
     def setup_method(self, method):
         """
-        Setup method run after each test.
-        Creates a tournament and a user and saves its token.
+        Setup method runs after each test.
+        Creates a tournament, a user, a tournamentUser.
         """
         self.user = UserFactory()
         self.token = Token.objects.get(user_id=self.user.user_id)

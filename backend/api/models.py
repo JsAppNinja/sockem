@@ -40,7 +40,13 @@ class Tournament(models.Model):
     creator = \
         models.ForeignKey(User, on_delete=models.PROTECT, related_name='tournament_creator_id')
     users = \
-        models.ManyToManyField(User, through='TournamentUser', related_name='tournament_users', blank=True, null=True)
+        models.ManyToManyField(
+            User,
+            through='TournamentUser',
+            related_name='tournament_users',
+            blank=True,
+            null=True
+        )
 
     class Meta:
         db_table = 'tournament'

@@ -14,10 +14,11 @@
 * Indentation: 2 spaces
 ### CSS
 * Indentation: 2 spaces
-### Javascript
+### Javascript / Typescript
 * Indentation: 2 spaces
 * Run [Prettier](https://prettier.io/) on all .js files that have been edited
-* Prettier can be run over all files in a specific directory by using ``` prettier --write "**/*.js" ```
+* Prettier can be run over all files in a specific directory by using 
+  ``` prettier --write "**/*.js" ``` or ``` prettier --write "**/*.tsx" ```
 * ATM there are issues with running prettier from within a Docker container so this should be installed locally
 ### Python
 * Run [Pylint](https://www.pylint.org/) on all .py files that have been edited
