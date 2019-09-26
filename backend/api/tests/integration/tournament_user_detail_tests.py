@@ -58,33 +58,31 @@ class TournamentUserDetailTests(APITestCase):
         response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
         self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
         self.assertIsNotNone(response.data['user_id'])
         self.assertIsNotNone(response.data['tournament_id'])
         self.assertFalse(response.data['is_judge'])
 
-    # def test_put_tournament_user_detail_update_tournament(self):
-    #     """
-    #     Tests PUT TournamentUserDetail view for updating tournament field
-    #     """
-    #
-    #     data = {
-    #         "tournament": "http://testserver/api/tournaments/" + str(self.tournament.tournament_id),
-    #         "is_judge": False
-    #     }
-    #
-    #     old_tournament = self.tournament
-    #     new_tournament = TournamentFactory()
-    #
-    #     response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #
-    #     self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
-    #     self.assertIsNotNone(response.data['user_id'])
-    #     self.assertIsNotNone(response.data['tournament_id'])
-    #     self.assertFalse(response.data['is_judge'])
+    def test_put_tournament_user_detail_update_tournament(self):
+        """
+        Tests PUT TournamentUserDetail view for updating tournament field
+        """
+
+        new_tournament = TournamentFactory()
+
+        data = {
+            "tournament": "http://testserver/api/tournaments/" + str(new_tournament.tournament_id),
+            "is_judge": True
+        }
+
+        response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
+        self.assertIsNotNone(response.data['user_id'])
+        self.assertEqual(response.data['tournament_id'], new_tournament.tournament_id)
+        self.assertNotEqual(response.data['tournament_id'], self.tournament.tournament_id)
+        self.assertTrue(response.data['is_judge'])
 
     # def test_delete_Tournament_detail(self):
     #     """
