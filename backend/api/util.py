@@ -5,7 +5,7 @@ import re
 from django.core.exceptions import ValidationError
 
 
-def validate_parent(self, parent, current_round):
+def validate_parent(parent, current_round):
     """
     Checks to see if a Match object being saved has valid 'prev_matches' fields
     Currently checks to see if the 'round' fields in 'prev_matches' are all lower
@@ -15,7 +15,6 @@ def validate_parent(self, parent, current_round):
         serializers.MatchSerializer.validate
         forms.MatchForm.clean
 
-    :param self:
     :param parent: a parent match
     :param current_round: integer value that is guaranteed to be >= 1
     :return: Raises a ValidationError if field is invalid
@@ -55,5 +54,12 @@ def validate_token(token):
         raise ValidationError("Token length is incorrect")
 
 
-def does_url_match_id(url, id):
-    return int(url.path.split("/")[3]) == id
+def does_url_match_id(url, id_num):
+    """
+    Takes an API url string and checks if the ID at the end matches the input
+
+    :param url: URL string
+    :param id_num: number of id
+    :return: True or False
+    """
+    return int(url.path.split("/")[3]) == id_num

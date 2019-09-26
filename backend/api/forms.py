@@ -21,5 +21,5 @@ class MatchForm(forms.ModelForm):
         parent = self.cleaned_data.get('parent')
         current_round = self.cleaned_data.get('round')
         if parent:
-            validate_parent(self, parent, current_round)
+            validate_parent(parent, current_round)
         return self.cleaned_data

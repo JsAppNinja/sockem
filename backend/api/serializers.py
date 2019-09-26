@@ -87,7 +87,12 @@ class TournamentSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for Tournament model
     """
-    users = TournamentUserSerializer(source='tournamentuser_set', read_only=False, many=True, required=False)
+    users = TournamentUserSerializer(
+        source='tournamentuser_set',
+        read_only=False,
+        many=True,
+        required=False
+    )
     creator = serializers.HyperlinkedRelatedField(read_only=True, view_name='user-detail')
 
     class Meta:
@@ -171,7 +176,7 @@ class MatchSerializer(serializers.HyperlinkedModelSerializer):
         parent = (attrs['parent'])
         current_round = (attrs['round'])
         if parent:
-            validate_parent(self, parent, current_round)
+            validate_parent(parent, current_round)
 
         return attrs
 
