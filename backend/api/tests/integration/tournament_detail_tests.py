@@ -57,7 +57,7 @@ class TournamentDetailTests(APITestCase):
         self.assertNotEqual(response.data['name'], old_name)
         self.assertNotEqual(response.data['start_date'], old_start_date)
 
-    def test_delete_Tournament_detail(self):
+    def test_delete_tournament_detail(self):
         """
         Tests DELETE TournamentDetail view
         """
