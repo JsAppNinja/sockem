@@ -45,33 +45,47 @@ class TournamentUserDetailTests(APITestCase):
         self.assertIsNotNone(response.data['tournament_id'])
         self.assertTrue(response.data['is_judge'])
 
-    # def test_put_tournament_detail(self):
+    def test_put_tournament_user_detail_update_is_judge(self):
+        """
+        Tests PUT TournamentUserDetail view for updating is_judge field
+        """
+
+        data = {
+            "tournament": "http://testserver/api/tournaments/" + str(self.tournament.tournament_id),
+            "is_judge": False
+        }
+
+        response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
+        self.assertIsNotNone(response.data['user_id'])
+        self.assertIsNotNone(response.data['tournament_id'])
+        self.assertFalse(response.data['is_judge'])
+
+    # def test_put_tournament_user_detail_update_tournament(self):
     #     """
-    #     Tests PUT TournamentDetail view
+    #     Tests PUT TournamentUserDetail view for updating tournament field
     #     """
-    #     old_name = self.tournament.name
-    #     old_start_date = self.tournament.start_date
-    #
-    #     put_name = "Testing Pasta Tournament"
-    #     put_start_date = "2006-06-06T21:51:23Z"
     #
     #     data = {
-    #         "name": put_name,
-    #         "start_date": put_start_date,
+    #         "tournament": "http://testserver/api/tournaments/" + str(self.tournament.tournament_id),
+    #         "is_judge": False
     #     }
+    #
+    #     old_tournament = self.tournament
+    #     new_tournament = TournamentFactory()
     #
     #     response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
     #
     #     self.assertEqual(response.status_code, status.HTTP_200_OK)
     #
-    #     self.assertEqual(response.data['tournament_id'], self.tournament.tournament_id)
-    #     self.assertEqual(response.data['name'], put_name)
-    #     self.assertEqual(response.data['start_date'], put_start_date)
-    #     self.assertEqual(len(response.data['users']), 0)
-    #
-    #     self.assertNotEqual(response.data['name'], old_name)
-    #     self.assertNotEqual(response.data['start_date'], old_start_date)
-    #
+    #     self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
+    #     self.assertIsNotNone(response.data['user_id'])
+    #     self.assertIsNotNone(response.data['tournament_id'])
+    #     self.assertFalse(response.data['is_judge'])
+
     # def test_delete_Tournament_detail(self):
     #     """
     #     Tests DELETE TournamentDetail view
