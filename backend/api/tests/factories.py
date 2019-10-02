@@ -64,7 +64,7 @@ class MatchFactory(factory.django.DjangoModelFactory):
         model = Match
 
     tournament = factory.SubFactory(TournamentFactory)
-    round = 1
+    round = 2
 
     @factory.post_generation
     def users(self, create, extracted, **kwargs):
