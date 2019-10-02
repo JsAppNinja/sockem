@@ -7,7 +7,6 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from api.tests.factories import UserFactory, TournamentFactory, MatchFactory
-from api.tests.unit.user_tests import UserTests
 from api.models import User, Tournament, Match
 from api.util import does_url_match_id
 
@@ -84,17 +83,23 @@ class MatchListTests(APITestCase):
         self.assertTrue(not inserted_match['users'])
         self.assertIsNone(inserted_match['parent'])
 
-    # def test_get_user(self):
-    #     """
-    #     Tests GET UserList view
-    #     """
-    #
-    #     response = self.client.get(self.url, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(User.objects.count(), 1)
-    #     self.assertEqual(response.data['count'], 1)
-    #
-    #     returned_user = response.data['results'][0]
-    #     self.assertTrue(does_url_match_id(urlparse(returned_user['url']), returned_user['user_id']))
-    #     self.assertTrue(UserTests.is_valid_generated_username(returned_user['username']))
-    #     self.assertTrue(UserTests.is_valid_generated_email(returned_user['username'], returned_user['email']))
+    def test_get_match(self):
+        """
+        Tests GET MatchList view
+        """
+
+        response = self.client.get(self.url, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Match.objects.count(), 1)
+        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(response.data['count'], len(response.data['results']))
+
+        returned_match = response.data['results'][0]
+        self.assertTrue(does_url_match_id(urlparse(returned_match['url']), returned_match['match_id']))
+        self.assertEqual(returned_match['match_id'], self.match.match_id)
+        self.assertIsNotNone(returned_match['tournament'])
+        self.assertEqual(returned_match['tournament_id'], self.match.tournament.tournament_id)
+        self.assertEqual(returned_match['round'], self.match.round)
+        self.assertIsNotNone(returned_match['users'])
+        self.assertEqual(returned_match['parent'], self.match.parent)
+
