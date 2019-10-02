@@ -18,7 +18,7 @@ from . import serializers
 
 
 @api_view(['GET'])
-def api_root(request):
+def api_root(request, format=None):
     """
     View for the API_root
 
