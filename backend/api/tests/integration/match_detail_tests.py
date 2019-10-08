@@ -72,33 +72,12 @@ class MatchDetailTests(APITestCase):
         self.assertEqual(response.data['round'], data['round'])
         self.assertEqual(response.data['parent'], data['parent'])
 
-    # def test_put_tournament_user_detail_update_tournament(self):
-    #     """
-    #     Tests PUT TournamentUserDetail view for updating tournament field
-    #     """
-    #
-    #     new_tournament = TournamentFactory()
-    #
-    #     data = {
-    #         "tournament": "http://testserver/api/tournaments/" + str(new_tournament.tournament_id),
-    #         "is_judge": True
-    #     }
-    #
-    #     response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
-    #     self.assertIsNotNone(response.data['user_id'])
-    #     self.assertEqual(response.data['tournament_id'], new_tournament.tournament_id)
-    #     self.assertNotEqual(response.data['tournament_id'], self.tournament.tournament_id)
-    #     self.assertTrue(response.data['is_judge'])
-    #
-    # def test_delete_tournament_user_detail(self):
-    #     """
-    #     Tests DELETE TournamentUserDetail view
-    #     """
-    #     response = self.client.delete(self.url, HTTP_AUTHORIZATION='Token ' + self.token.key)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-    #     self.assertEqual(TournamentUser.objects.count(), 1)
-    #     self.assertIsNotNone(TournamentUser.objects.get(tournament_user_id=self.tournamentUser.tournament_user_id))
+    def test_delete_match_detail(self):
+        """
+        Tests DELETE MatchDetail view
+        """
+        response = self.client.delete(self.url, HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(Match.objects.count(), 1)
+        self.assertIsNotNone(Match.objects.get(match_id=self.match.match_id))
