@@ -48,27 +48,30 @@ class MatchDetailTests(APITestCase):
         )
         self.assertEqual(response.data['tournament_id'], self.match.tournament_id)
         self.assertEqual(response.data['round'], self.match.round)
-        self.assertTrue(len(response.data['users']) == 0)
         self.assertIsNone(response.data['parent'])
 
-    # def test_put_tournament_user_detail_update_is_judge(self):
-    #     """
-    #     Tests PUT TournamentUserDetail view for updating is_judge field
-    #     """
-    #
-    #     data = {
-    #         "tournament": "http://testserver/api/tournaments/" + str(self.tournament.tournament_id),
-    #         "is_judge": False
-    #     }
-    #
-    #     response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-    #
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    #     self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
-    #     self.assertIsNotNone(response.data['user_id'])
-    #     self.assertIsNotNone(response.data['tournament_id'])
-    #     self.assertFalse(response.data['is_judge'])
-    #
+    def test_put_match_detail(self):
+        """
+        Tests PUT MatchDetail view
+        """
+        new_tournament = TournamentFactory()
+        parent_match = MatchFactory()
+
+        data = {
+            "tournament": "http://testserver/api/tournaments/" + str(new_tournament.tournament_id),
+            "round": 1,
+            "parent": "http://testserver/api/matches/" + str(parent_match.match_id)
+        }
+
+        response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data is not None)
+        self.assertEqual(response.data['tournament'], data['tournament'])
+        self.assertEqual(response.data['tournament_id'], new_tournament.tournament_id)
+        self.assertEqual(response.data['round'], data['round'])
+        self.assertEqual(response.data['parent'], data['parent'])
+
     # def test_put_tournament_user_detail_update_tournament(self):
     #     """
     #     Tests PUT TournamentUserDetail view for updating tournament field

@@ -52,7 +52,6 @@ class MatchListTests(APITestCase):
 
         inserted_match = response.data
         self.assertTrue(inserted_match is not None)
-
         self.assertEqual(inserted_match['tournament'], data['tournament'])
         self.assertEqual(inserted_match['tournament_id'], self.tournament.tournament_id)
         self.assertEqual(inserted_match['round'], data['round'])

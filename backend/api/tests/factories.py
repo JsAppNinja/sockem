@@ -1,11 +1,9 @@
 """
 Factories used for testing models
 """
-from django.utils import timezone
 
 from datetime import datetime
 import pytz
-import factory
 import factory.fuzzy
 from ..models import User, Tournament, TournamentUser, Match, MatchUser, Game
 
