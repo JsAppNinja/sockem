@@ -75,25 +75,40 @@ class MatchUserListTests(APITestCase):
         )
         self.assertEqual(response.data["match_id"], self.match.match_id)
 
-#     def test_get_tournament_user(self):
-#         """
-#         Tests GET TournamentUserList view
-#         """
-#
-#         response = self.client.get(self.url, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(TournamentUser.objects.count(), 1)
-#         self.assertEqual(response.data['count'], 1)
-#
-#         returned_tournament_user = response.data['results'][0]
-#         self.assertTrue(
-#             does_url_match_id(
-#                 urlparse(returned_tournament_user['url']),
-#                 returned_tournament_user['tournament_user_id']
-#             )
-#         )
-#         self.assertTrue(returned_tournament_user["user"] is not None)
-#         self.assertTrue(returned_tournament_user['user_id'] >= 1)
-#         self.assertTrue(returned_tournament_user["tournament"] is not None)
-#         self.assertTrue(returned_tournament_user['tournament_id'] >= 1)
-#         self.assertTrue(returned_tournament_user['is_judge'])
+    def test_get_match_user(self):
+        """
+        Tests GET MatchUserList view
+        """
+
+        response = self.client.get(self.url, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(MatchUser.objects.count(), 1)
+        self.assertEqual(response.data['count'], 1)
+        self.assertIsNone(response.data['next'])
+        self.assertIsNone(response.data['previous'])
+
+        returned_match_user = response.data['results'][0]
+        self.assertTrue(
+            does_url_match_id(
+                urlparse(returned_match_user['url']),
+                returned_match_user['match_user_id']
+            )
+        )
+
+        self.assertTrue(returned_match_user["user"] is not None)
+        self.assertTrue(returned_match_user['user_id'] >= 1)
+        self.assertTrue(
+            does_url_match_id(
+                urlparse(returned_match_user["user"]),
+                returned_match_user['user_id']
+            )
+        )
+
+        self.assertTrue(returned_match_user["match"] is not None)
+        self.assertTrue(returned_match_user['match_id'] >= 1)
+        self.assertTrue(
+            does_url_match_id(
+                urlparse(returned_match_user["match"]),
+                returned_match_user['match_id']
+            )
+        )
