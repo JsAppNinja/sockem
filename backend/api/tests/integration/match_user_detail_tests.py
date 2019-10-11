@@ -68,45 +68,45 @@ class MatchUserDetailTests(APITestCase):
             )
         )
 
-#     def test_put_tournament_user_detail_update_is_judge(self):
-#         """
-#         Tests PUT TournamentUserDetail view for updating is_judge field
-#         """
-#
-#         data = {
-#             "tournament": "http://testserver/api/tournaments/" + str(self.tournament.tournament_id),
-#             "is_judge": False
-#         }
-#
-#         response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
-#         self.assertIsNotNone(response.data['user_id'])
-#         self.assertIsNotNone(response.data['tournament_id'])
-#         self.assertFalse(response.data['is_judge'])
-#
-#     def test_put_tournament_user_detail_update_tournament(self):
-#         """
-#         Tests PUT TournamentUserDetail view for updating tournament field
-#         """
-#
-#         new_tournament = TournamentFactory()
-#
-#         data = {
-#             "tournament": "http://testserver/api/tournaments/" + str(new_tournament.tournament_id),
-#             "is_judge": True
-#         }
-#
-#         response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
-#
-#         self.assertEqual(response.status_code, status.HTTP_200_OK)
-#         self.assertEqual(response.data['tournament_user_id'], self.tournamentUser.tournament_user_id)
-#         self.assertIsNotNone(response.data['user_id'])
-#         self.assertEqual(response.data['tournament_id'], new_tournament.tournament_id)
-#         self.assertNotEqual(response.data['tournament_id'], self.tournament.tournament_id)
-#         self.assertTrue(response.data['is_judge'])
-#
+    def test_put_match_user_detail(self):
+        """
+        Tests PUT MatchUserDetail view
+        """
+
+        data = {
+            "user": "http://testserver/api/users/" + str(self.user.user_id),
+            "match": "http://testserver/api/matches/" + str(self.match.match_id)
+        }
+
+        response = self.client.put(self.url, data, format='json', HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(MatchUser.objects.count(), 1)
+        self.assertTrue(response.data is not None)
+
+        self.assertTrue(
+            does_url_match_id(
+                urlparse(response.data['url']),
+                self.match_user.match_user_id
+            )
+        )
+
+        self.assertTrue(
+            does_url_match_id(
+                urlparse(response.data["user"]),
+                self.user.user_id
+            )
+        )
+        self.assertEqual(response.data["user_id"], self.user.user_id)
+
+        self.assertTrue(
+            does_url_match_id(
+                urlparse(response.data["match"]),
+                self.match.match_id
+            )
+        )
+        self.assertEqual(response.data["match_id"], self.match.match_id)
+
 #     def test_delete_tournament_user_detail(self):
 #         """
 #         Tests DELETE TournamentUserDetail view
