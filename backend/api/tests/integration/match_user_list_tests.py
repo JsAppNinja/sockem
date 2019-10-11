@@ -6,8 +6,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
-from api.tests.factories import MatchFactory, MatchUserFactory, TournamentFactory, TournamentUserFactory, UserFactory
-from api.models import Match, MatchUser, Tournament, TournamentUser, User
+from api.tests.factories import MatchFactory, MatchUserFactory, TournamentFactory, UserFactory
+from api.models import Match, MatchUser, Tournament, User
 from api.util import does_url_match_id
 
 

@@ -90,8 +90,8 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
     "parent": "http://localhost:8000/api/matches/11"
 }
 ```
-
-# POST /api/match_users/
+# /api/match_users/
+### POST /api/match_users/
 * The JSON body should match the form below. 
 * For the `user` and `match` fields, send the URLs instead of the raw primary keys
 ```
@@ -101,6 +101,27 @@ The password will get hashed automatically using Django's default PBKDF2 algorit
 }
 ```
 
+* Returns
+```
+{
+    "url": "http://localhost:8000/api/match_users/1",
+    "match_user_id": 1,
+    "user": "http://localhost:8000/api/users/1",
+    "user_id": 1,
+    "match": "http://localhost:8000/api/matches/1",
+    "match_id": 1
+}
+```
+
+### PUT /api/match_users/
+* The JSON body should match the form below. 
+* For the `user` and `match` fields, send the URLs instead of the raw primary keys
+```
+{
+    "user": "http://localhost:8000/api/users/1",
+    "match": "http://localhost:8000/api/matches/1"
+}
+```
 * Returns
 ```
 {
