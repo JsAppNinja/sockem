@@ -107,12 +107,12 @@ class MatchUserDetailTests(APITestCase):
         )
         self.assertEqual(response.data["match_id"], self.match.match_id)
 
-#     def test_delete_tournament_user_detail(self):
-#         """
-#         Tests DELETE TournamentUserDetail view
-#         """
-#         response = self.client.delete(self.url, HTTP_AUTHORIZATION='Token ' + self.token.key)
-#
-#         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-#         self.assertEqual(TournamentUser.objects.count(), 1)
-#         self.assertIsNotNone(TournamentUser.objects.get(tournament_user_id=self.tournamentUser.tournament_user_id))
+    def test_delete_match_user_detail(self):
+        """
+        Tests DELETE MatchUserDetail view
+        """
+        response = self.client.delete(self.url, HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(MatchUser.objects.count(), 1)
+        self.assertIsNotNone(MatchUser.objects.get(match_user_id=self.match_user.match_user_id))
